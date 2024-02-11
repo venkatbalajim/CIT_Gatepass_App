@@ -1,0 +1,323 @@
+// ignore_for_file: use_build_context_synchronously
+
+import '../utils/imports.dart';
+
+class ScannerPage extends StatefulWidget {
+  const ScannerPage({super.key});
+
+  @override
+  State<ScannerPage> createState() => _ScannerPageState();
+}
+
+class _ScannerPageState extends State<ScannerPage> {
+  String errorMessage = "Failed to scan QR Code. ";
+  Map<String, dynamic>? userData;
+  final TextEditingController passwordController = TextEditingController();
+
+  String qrValue = '';
+  String decodedText = '';
+
+  @override
+  void dispose() {
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    qrScanner();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      // ignore: deprecated_member_use
+      child: WillPopScope(
+        onWillPop: () async {
+          Navigator.pushReplacementNamed(context, '/options');
+          return false;
+        },
+        child: Scaffold(
+          body: ListView(
+            padding: const EdgeInsets.all(16.0),
+            children: [
+              const SizedBox(height: 30),
+              SizedBox(
+                width: 320,
+                child: Text(
+                  "Student Outpass",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.blue[900],
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 40),
+              userData != null
+                  ? outpassDetails()
+                  : SizedBox(
+                      width: 250,
+                      child: errorText(),
+                    ),
+              if (userData != null) ...[
+                const SizedBox(height: 30),
+                SizedBox(
+                  width: 250,
+                  child: Text(
+                    "To allow the student, enter the password.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.grey[800],
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    width: 180,
+                    child: PasswordField(controller: passwordController),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    width: 150,
+                    child: SmallButton(name: "Verify", onTap: () async {
+                      showLoadingDialog();
+                      UserDetails securityUser = UserDetails();
+                      final password = await securityUser.fetchPassword();
+                      String enteredPassword = passwordController.text;
+                      if (password == enteredPassword) {
+                        await Validation.updateStatus(context, decodedText);
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, '/options');
+                      } else {
+                        Navigator.pop(context);
+                        showErrorDialog(context, "Invalid Password");
+                      }
+                    }),
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  String? currentStatus(int status) {
+    if (status == 0) {
+      return "No";
+    } else if (status == 1) {
+      return "Yes";
+    } 
+    return null;
+  }
+
+  void showLoadingDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return  const Center(
+          child: Dialog(
+            backgroundColor: Colors.white,
+            surfaceTintColor: Colors.transparent,
+            child: SizedBox(
+              width: 250,
+              height: 200,
+              child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 50),
+                CircularProgressIndicator(
+                  color: Color.fromRGBO(13, 71, 161, 1),
+                ),
+                SizedBox(height: 30),
+                Text(
+                  "Please wait a moment",
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+                SizedBox(height: 20),
+              ],
+            ),
+            )
+          ),
+        );
+      },
+    );
+  }
+
+  Widget outpassDetails() {
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(30, 20, 30, 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(
+          color: const Color.fromRGBO(13, 71, 161, 1),
+          width: 2,
+        ),
+      ),
+      alignment: Alignment.centerLeft,
+      width: 300,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          InfoCard(label: 'Name', detail: userData!['name']),
+          InfoCard(label: 'Department', detail: userData!['department']),
+          InfoCard(label: 'Year', detail: userData!['year']),
+          InfoCard(label: 'Hostel', detail: userData!['hostel']),
+          InfoCard(label: 'Submit date', detail: userData!['submit_date']),
+          InfoCard(label: 'Purpose', detail: userData!['purpose']),
+          InfoCard(label: 'Out date', detail: userData!['out_date']),
+          InfoCard(label: 'Out time', detail: userData!['out_time']),
+          InfoCard(label: 'In date', detail: userData!['in_date']),
+          InfoCard(label: 'In time', detail: userData!['in_time']),
+          InfoCard(label: 'Depart Status', detail: currentStatus(userData!['depart_status'])),
+          InfoCard(label: 'Arrival Status', detail: currentStatus(userData!['arrival_status'])),
+        ],
+      ),
+    );
+  }
+
+  Widget errorText() {
+    return Text(
+      errorMessage,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        color: Colors.red[700],
+        fontSize: 15,
+      ),
+    );
+  }
+
+  Future<void> qrScanner() async {
+    try {
+      final scannerResult = await FlutterBarcodeScanner.scanBarcode(
+        '#ff6666',
+        'CANCEL',
+        true,
+        ScanMode.QR,
+      );
+
+      if (!mounted) return;
+
+      if (scannerResult != "-1") {
+        qrValue = scannerResult;
+        UserDetails newDetail = UserDetails();
+        decodedText = utf8.decode(base64Decode(qrValue));
+        // ignore: avoid_print
+        print("QR Value is $qrValue and Decoded text is $decodedText");
+        final outpassData = await newDetail.fetchStudentOutpass(decodedText);
+        final isSubmitted = outpassData?['is_submitted'];
+        if (isSubmitted == 2) {
+          setState(() {
+            userData = outpassData;
+          });
+        } else {
+          showAlertDialog(context, 'Invalid Outpass QR Code.');
+        }
+      } else {
+        setState(() {
+          userData = null;
+        });
+      }
+    } on PlatformException {
+      setState(() {
+        userData = null;
+      });
+    }
+  }
+
+  void showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          surfaceTintColor: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.all(15),
+            width: 250,
+            height: 200,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: 80,
+                  child: SmallButton(
+                  onTap: () {
+                    Navigator.popUntil(context, (route) => route.settings.name == '/scanner');
+                  },
+                  name: 'Ok',
+                ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void showAlertDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          surfaceTintColor: Colors.transparent,
+          child: SizedBox(
+            width: 250,
+            height: 200,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: 80,
+                  child: SmallButton(
+                  onTap: () {
+                    Navigator.popUntil(context, (route) => route.settings.name == '/options');
+                  },
+                  name: 'Ok',
+                ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+}

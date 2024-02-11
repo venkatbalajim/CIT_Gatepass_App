@@ -1,0 +1,47 @@
+name: outpassfaculty
+description: "The CIT Outpass App is a mobile application designed to simplify the outpass request process for students residing in the Chennai Institute of Technology (CIT) college hostels."
+publish_to: 'none' 
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: 
+  google_sign_in: 
+  google_fonts: 
+  firebase_core: 
+  firebase_auth: 
+  cloud_firestore: 
+  intl: 
+  connectivity_plus: 
+  firebase_messaging: 
+  cloud_functions: 
+  shared_preferences:
+  syncfusion_flutter_xlsio: 
+  open_file:
+  permission_handler:
+  path_provider:
+  csv:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: 
+  flutter_launcher_icons: 
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/app_icon.png"
+  adaptive_icon_foreground: "images/app_icon_foreground.png"
+  adaptive_icon_background: "#ffffff"
+
+flutter:
+  uses-material-design: true
+  assets:
+    - images/college_logo.png
+    - images/google_logo.png
+
