@@ -55,13 +55,26 @@ class _ScannerPageState extends State<ScannerPage> {
                 ),
               ),
               const SizedBox(height: 40),
-              userData != null
-                  ? outpassDetails()
-                  : SizedBox(
-                      width: 250,
-                      child: errorText(),
-                    ),
               if (userData != null) ...[
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: 150, height: 150,
+                    decoration: BoxDecoration(
+                      color: Colors.green[600],
+                      borderRadius: BorderRadius.circular(100)
+                    ),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      badgeNumber(userData!['depart_status']),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 75
+                      ),
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 30),
                 SizedBox(
                   width: 250,
@@ -70,7 +83,7 @@ class _ScannerPageState extends State<ScannerPage> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.grey[800],
-                        fontSize: 13,
+                        fontSize: 15,
                         fontWeight: FontWeight.w500),
                   ),
                 ),
@@ -103,8 +116,15 @@ class _ScannerPageState extends State<ScannerPage> {
                     }),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 40),
               ],
+              userData != null
+                  ? outpassDetails()
+                  : SizedBox(
+                      width: 250,
+                      child: errorText(),
+                    ),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -119,6 +139,14 @@ class _ScannerPageState extends State<ScannerPage> {
       return "Yes";
     } 
     return null;
+  }
+
+  String badgeNumber(int status) {
+    if (status == 0) {
+      return "1";
+    } else {
+      return "2";
+    }
   }
 
   void showLoadingDialog() {
@@ -194,8 +222,7 @@ class _ScannerPageState extends State<ScannerPage> {
     return Text(
       errorMessage,
       textAlign: TextAlign.center,
-      style: TextStyle(
-        color: Colors.red[700],
+      style: const TextStyle(
         fontSize: 15,
       ),
     );
@@ -225,7 +252,7 @@ class _ScannerPageState extends State<ScannerPage> {
             userData = outpassData;
           });
         } else {
-          showAlertDialog(context, 'Invalid Outpass QR Code.');
+          showNotApprovedDialog(context);
         }
       } else {
         setState(() {
@@ -280,7 +307,7 @@ class _ScannerPageState extends State<ScannerPage> {
     );
   }
 
-  void showAlertDialog(BuildContext context, String message) {
+  void showNotApprovedDialog(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -290,16 +317,28 @@ class _ScannerPageState extends State<ScannerPage> {
           surfaceTintColor: Colors.transparent,
           child: SizedBox(
             width: 250,
-            height: 200,
+            height: 400,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  message,
+                Container(
+                  width: 150, height: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(100)
+                  ),
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(16),
+                  child: const Icon(Icons.close, color: Colors.white, size: 100,),
+                ),
+                const SizedBox(height: 20,),
+                const Text(
+                  "Invalid Outpass QR Code",
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 15,
+                  style: TextStyle(
+                    fontSize: 17,
+                    color: Colors.red
                   ),
                 ),
                 const SizedBox(height: 20),
