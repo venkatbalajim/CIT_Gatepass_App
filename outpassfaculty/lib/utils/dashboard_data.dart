@@ -143,6 +143,16 @@ class DashboardDetails {
     }).toList();
   }
 
+  // Method to separate the documents who are not yet arrived. 
+  List<DocumentSnapshot<Map<String, dynamic>>> notYetArrivedDocuments(
+    List<DocumentSnapshot<Map<String, dynamic>>>? allDocuments
+  ) {
+    return allDocuments!.where((doc) {
+      final userData = doc.data();
+      return userData!['depart_status'] == 0;
+    }).toList();
+  }
+
   // Method to count the documents with the specified value. 
   int countDocumentsWithFieldValue(List<DocumentSnapshot<Map<String, dynamic>>>? documents, String fieldName) {
     int count = 0;
@@ -157,14 +167,30 @@ class DashboardDetails {
     return count;
   }
 
-  // Method to separate the documents who are not yet arrived. 
-  List<DocumentSnapshot<Map<String, dynamic>>> notYetArrivedDocuments(
-    List<DocumentSnapshot<Map<String, dynamic>>>? allDocuments
-  ) {
-    return allDocuments!.where((doc) {
-      final userData = doc.data();
-      return userData!['depart_status'] == 0;
-    }).toList();
+  int countBasedOnHostelName(List<DocumentSnapshot<Map<String, dynamic>>>? documents, String hostelName, String fieldName) {
+    int count = 0;
+    if (documents != null) {
+      for (var document in documents) {
+        final data = document.data();
+        if (data!['hostel'] == hostelName && data[fieldName] == 1) {
+          count++;
+        }
+      }
+    }
+    return count;
+  }
+
+  int countBasedOnDepartment(List<DocumentSnapshot<Map<String, dynamic>>>? documents, String department, String fieldName) {
+    int count = 0;
+    if (documents != null) {
+      for (var document in documents) {
+        final data = document.data();
+        if (data!['department'] == department && data[fieldName] == 1) {
+          count++;
+        }
+      }
+    }
+    return count;
   }
 
 }
