@@ -103,7 +103,7 @@ class UserDetails {
 
     QuerySnapshot<Map<dynamic, dynamic>> userQuery;
 
-    if (position == 'Faculty - Class Advisor') {
+    if (position == 'Class Advisor') {
       userQuery = await userCollection.where(
         'year', isEqualTo: year,
       ).where(
@@ -116,7 +116,7 @@ class UserDetails {
         'warden_status', isNotEqualTo: -1,
       )
       .get();
-    } else if (position == 'Faculty - HoD') {
+    } else if (position == 'HoD') {
       userQuery = await userCollection.where(
         'year', isEqualTo: year,
       ).where(

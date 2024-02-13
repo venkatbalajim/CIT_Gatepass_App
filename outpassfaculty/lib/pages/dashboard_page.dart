@@ -182,9 +182,6 @@ class _DashboardPageState extends State<DashboardPage> {
           final hodDocuments = dashboardDetails.filterHodDocuments(filteredDocuments, department ?? '', year ?? 0);
           final wardenDocuments = dashboardDetails.filterWardenDocuments(filteredDocuments, hostel ?? '');
 
-          int overallDepartCount = dashboardDetails.countDocumentsWithFieldValue(widget.documents, 'depart_status');
-          int overallArrivalCount = dashboardDetails.countDocumentsWithFieldValue(widget.documents, 'arrival_status');
-
           int advisorDepartCount = dashboardDetails.countDocumentsWithFieldValue(advisorDocuments, 'depart_status');
           int advisorArrivalCount = dashboardDetails.countDocumentsWithFieldValue(advisorDocuments, 'arrival_status');
 
@@ -206,12 +203,8 @@ class _DashboardPageState extends State<DashboardPage> {
               // ignore: deprecated_member_use
               child: WillPopScope(
                 onWillPop: () async {
-                  if (position == "Principal") {
-                    Navigator.popUntil(context, (route) => route.settings.name == '/');
-                  } else {
-                    Navigator.popUntil(context, (route) => route.settings.name == '/options');
-                  }
-                  return true;
+                  Navigator.popUntil(context, (route) => route.settings.name == '/options');
+                  return false;
                 },
                 child: Scaffold(
                   appBar: AppBar(
@@ -266,21 +259,17 @@ class _DashboardPageState extends State<DashboardPage> {
                   body: ListView(
                     padding: const EdgeInsets.all(15),
                     children: [
-                      position == 'Principal'
-                          ? PrincipalDashboardCounter(countOne: overallDepartCount, countTwo: overallArrivalCount)
-                          : position == 'Faculty - Class Advisor'
-                              ? AdvisorDashboardCounter(countOne: advisorDepartCount, countTwo: advisorArrivalCount)
-                              : position == 'Faculty - HoD'
-                                  ? HodDashboardCounter(countOne: hodDepartCount, countTwo: hodArrivalCount)
-                                  : WardenDashboardCounter(countOne: wardenDepartCount, countTwo: wardenArrivalCount),
+                      position == 'Faculty - Class Advisor'
+                        ? AdvisorDashboardCounter(countOne: advisorDepartCount, countTwo: advisorArrivalCount)
+                        : position == 'Faculty - HoD'
+                            ? HodDashboardCounter(countOne: hodDepartCount, countTwo: hodArrivalCount)
+                            : WardenDashboardCounter(countOne: wardenDepartCount, countTwo: wardenArrivalCount),
                       const SizedBox(height: 30,),
-                      position == "Principal"
-                          ? DashboardTable(documents: widget.documents)
-                          : position == 'Faculty - Class Advisor'
-                              ? DashboardTable(documents: advisorDocuments)
-                              : position == 'Faculty - HoD'
-                                  ? DashboardTable(documents: hodDocuments)
-                                  : DashboardTable(documents: wardenDocuments),
+                      position == 'Faculty - Class Advisor'
+                        ? DashboardTable(documents: advisorDocuments)
+                        : position == 'Faculty - HoD'
+                            ? DashboardTable(documents: hodDocuments)
+                            : DashboardTable(documents: wardenDocuments),
                     ],
                   ),
                 ),

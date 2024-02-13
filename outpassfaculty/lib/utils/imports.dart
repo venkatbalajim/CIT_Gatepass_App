@@ -57,6 +57,8 @@ import 'package:outpassfaculty/widgets/dashboard_page/dashboard_counter.dart';
 export 'package:outpassfaculty/widgets/dashboard_page/dashboard_counter.dart';
 import 'package:outpassfaculty/widgets/dashboard_page/filter_options.dart';
 export 'package:outpassfaculty/widgets/dashboard_page/filter_options.dart';
+import 'package:outpassfaculty/widgets/principal_page/counter_cards.dart';
+export 'package:outpassfaculty/widgets/principal_page/counter_cards.dart';
 
 // Dart Packages
 import 'dart:convert';
