@@ -239,25 +239,29 @@ class _ScannerPageState extends State<ScannerPage> {
 
       if (!mounted) return;
 
-      if (scannerResult != "-1") {
-        qrValue = scannerResult;
-        UserDetails newDetail = UserDetails();
-        decodedText = utf8.decode(base64Decode(qrValue));
-        // ignore: avoid_print
-        print("QR Value is $qrValue and Decoded text is $decodedText");
-        final outpassData = await newDetail.fetchStudentOutpass(decodedText);
-        final isSubmitted = outpassData?['is_submitted'];
-        if (isSubmitted == 2) {
-          setState(() {
-            userData = outpassData;
-          });
+      try {
+        if (scannerResult != "-1") {
+          qrValue = scannerResult;
+          UserDetails newDetail = UserDetails();
+          decodedText = utf8.decode(base64Decode(qrValue));
+          // ignore: avoid_print
+          print("QR Value is $qrValue and Decoded text is $decodedText");
+          final outpassData = await newDetail.fetchStudentOutpass(decodedText);
+          final isSubmitted = outpassData?['is_submitted'];
+          if (isSubmitted == 2) {
+            setState(() {
+              userData = outpassData;
+            });
+          } else {
+            showNotApprovedDialog(context);
+          }
         } else {
-          showNotApprovedDialog(context);
+          setState(() {
+            userData = null;
+          });
         }
-      } else {
-        setState(() {
-          userData = null;
-        });
+      } catch (e) {
+        showNotApprovedDialog(context);
       }
     } on PlatformException {
       setState(() {
