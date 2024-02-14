@@ -28,7 +28,6 @@ class _DashboardPageState extends State<DashboardPage> {
   void clearSelectedOptions() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('selectedOption');
-    prefs.remove('selectedSection');
   }
 
   static void showErrorDialog(BuildContext context, String message) {
@@ -148,7 +147,7 @@ class _DashboardPageState extends State<DashboardPage> {
           String? hostel = userData['hostel'];
           String? isAdmin = userData['admin'] ?? '';
 
-          void onFilterOptionSelected(String selectedOption, String selectedSection) {
+          void onFilterOptionSelected(String selectedOption) {
             setState(() {
               filteredDocuments = widget.documents;
 
@@ -159,20 +158,6 @@ class _DashboardPageState extends State<DashboardPage> {
               } else if (selectedOption == 'Arrived') {
                 filteredDocuments = filteredDocuments
                     ?.where((doc) => doc['arrival_status'] == 1)
-                    .toList();
-              }
-
-              if (selectedSection == 'A') {
-                filteredDocuments = filteredDocuments
-                    ?.where((doc) => doc['section'] == 'A')
-                    .toList();
-              } else if (selectedSection == 'B') {
-                filteredDocuments = filteredDocuments
-                    ?.where((doc) => doc['section'] == 'B')
-                    .toList();
-              } else if (selectedSection == 'C') {
-                filteredDocuments = filteredDocuments
-                    ?.where((doc) => doc['section'] == 'C')
                     .toList();
               }
             });
@@ -236,8 +221,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                       if (!asAdmin)
                         FilterOptions(
-                          onOptionSelected: (selectedOption, selectedSection) {
-                            onFilterOptionSelected(selectedOption, selectedSection);
+                          onOptionSelected: (selectedOption) {
+                            onFilterOptionSelected(selectedOption);
                           },
                           position: position ?? '',
                         ),
@@ -259,15 +244,15 @@ class _DashboardPageState extends State<DashboardPage> {
                   body: ListView(
                     padding: const EdgeInsets.all(15),
                     children: [
-                      position == 'Faculty - Class Advisor'
+                      position == 'Class Advisor'
                         ? AdvisorDashboardCounter(countOne: advisorDepartCount, countTwo: advisorArrivalCount)
-                        : position == 'Faculty - HoD'
+                        : position == 'HoD'
                             ? HodDashboardCounter(countOne: hodDepartCount, countTwo: hodArrivalCount)
                             : WardenDashboardCounter(countOne: wardenDepartCount, countTwo: wardenArrivalCount),
                       const SizedBox(height: 30,),
-                      position == 'Faculty - Class Advisor'
+                      position == 'Class Advisor'
                         ? DashboardTable(documents: advisorDocuments)
-                        : position == 'Faculty - HoD'
+                        : position == 'HoD'
                             ? DashboardTable(documents: hodDocuments)
                             : DashboardTable(documents: wardenDocuments),
                     ],
