@@ -121,9 +121,9 @@ class _SubmissionPageState extends State<SubmissionPage> {
                   ),
                   body: ListView(
                     padding: const EdgeInsets.all(10),
-                    children: [position == 'Faculty - Class Advisor'
+                    children: [position == 'Class Advisor'
                       ? ClassAdvisorSubmissionContainer(outpassList: widget.outpassList,)
-                      : position == 'Faculty - HoD'  
+                      : position == 'HoD'  
                           ? HodSubmissionContainer(outpassList: widget.outpassList,) 
                           : WardenSubmissionContainer(outpassList: widget.outpassList),
                     ]
