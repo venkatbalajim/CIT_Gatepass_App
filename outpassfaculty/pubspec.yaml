@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: 
   google_sign_in: 
-  google_fonts: 
+  google_fonts: 6.1.0
   firebase_core: 
   firebase_auth: 
   cloud_firestore: 
@@ -24,7 +24,9 @@ dependencies:
   open_file:
   permission_handler:
   path_provider:
-  csv:
+  csv: 
+  file_picker: 
+  excel: 
 
 dev_dependencies:
   flutter_test:

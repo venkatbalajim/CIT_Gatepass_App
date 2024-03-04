@@ -6,6 +6,7 @@ const button_1 = "User Profile";
 const button_2 = "Outpass";
 const button_3 = "Dashboard";
 const button_4 = "Logout";
+const button_5 = "Database";
 
 Widget? getButtonIcon(String name) {
   switch (name) {
@@ -17,6 +18,8 @@ Widget? getButtonIcon(String name) {
       return const Icon(Icons.dashboard, color: Colors.white, size: 22,);
     case button_4:
       return const Icon(Icons.logout, color: Colors.white, size: 22,);
+    case button_5:
+      return const Icon(Icons.storage, color: Colors.white, size: 22,);
     default:
       return null;
   }
@@ -43,6 +46,8 @@ Widget HomeButton(BuildContext context, String name) {
         await dashboardDetails.fetchAllInfo(context);
       } else if (name == button_4) {
         FirebaseService.signOutFromGoogle(context);
+      } else if (name == button_5) {
+        Navigator.pushNamed(context, '/database');
       }
     },
     child: Container(

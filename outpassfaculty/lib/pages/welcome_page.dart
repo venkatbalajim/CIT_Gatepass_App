@@ -45,7 +45,7 @@ class _WelcomePageState extends State<WelcomePage> {
         if (_backButtonPressedOnce) {
           return true;
         } else {
-          CustomSnackBar.showExitSnackBar(context);
+          CustomSnackBar.showExitSnackBar(context, "Press again to exit app");
           _backButtonPressedOnce = true;
 
           if (_lastBackPressed == null ||

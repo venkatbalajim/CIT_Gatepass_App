@@ -8,6 +8,7 @@ class Routes {
   static const String submission = '/submission';
   static const String dashboard = '/dashboard';
   static const String principal = '/principal';
+  static const String database = '/database';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -18,6 +19,7 @@ class Routes {
       submission: (context) => const SubmissionPage(),
       dashboard: (context) => const DashboardPage(),
       principal: (context) => const PrincipalPage(),
+      database: (context) => const DatabasePage(),
       
     };
   }

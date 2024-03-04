@@ -116,6 +116,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         InfoCard(label: "Email ID", detail: userData?['email']),
                         if (userData?['position'] == 'Class Advisor' || userData?['position'] == 'HoD') InfoCard(label: "Year", detail: userData?['year']),
                         if (userData?['position'] != 'Warden') InfoCard(label: "Department", detail: userData?['department']),
+                        if (userData?['position'] == 'Warden') InfoCard(label: 'Hostel', detail: userData?['hostel']),
                         if (userData?['position'] == 'Class Advisor') InfoCard(label: "Section", detail: userData?['section']),
                       ],
                     ),

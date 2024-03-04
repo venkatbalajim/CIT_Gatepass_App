@@ -1,15 +1,15 @@
 import '../../utils/imports.dart';
 
 class CustomSnackBar {
-  static showExitSnackBar(BuildContext context) {
+  static showExitSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Container(
           alignment: Alignment.center,
-          child: const Text(
-            "Press again to exit app",
+          child: Text(
+            message,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 12,
               color: Colors.white,
             ),
@@ -17,7 +17,7 @@ class CustomSnackBar {
         ),
         duration: const Duration(seconds: 2),
         backgroundColor: Colors.grey[800],
-        width: 180,
+        width: 200,
         elevation: 10,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
