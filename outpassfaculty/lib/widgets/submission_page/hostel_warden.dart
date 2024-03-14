@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_print
 
-import '../../utils/imports.dart'; 
+import '../../utils/imports.dart';
 
 class WardenSubmissionContainer extends StatefulWidget {
   final List<QueryDocumentSnapshot<Map<dynamic, dynamic>>>? outpassList;
@@ -8,66 +8,73 @@ class WardenSubmissionContainer extends StatefulWidget {
   const WardenSubmissionContainer({super.key, required this.outpassList});
 
   @override
-  State<WardenSubmissionContainer> createState() => _WardenSubmissionContainerState();
+  State<WardenSubmissionContainer> createState() =>
+      _WardenSubmissionContainerState();
 }
 
 class _WardenSubmissionContainerState extends State<WardenSubmissionContainer> {
-
   void showStudentDialog(
-    BuildContext context, 
-    String name, String registerNo, String year,
-    String department, String section, String hostel, String roomNo,
-    String studentMobile, String parentMobile
-  ) {
+      BuildContext context,
+      String name,
+      String registerNo,
+      String year,
+      String department,
+      String section,
+      String hostel,
+      String roomNo,
+      String studentMobile,
+      String parentMobile) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          backgroundColor: Colors.white,
-          surfaceTintColor: Colors.transparent,
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            height: 500,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 200,
-                  height: 400,
-                  child: ListView(
-                    children: [
-                      InfoCard(label: 'Name', detail: name),
-                      InfoCard(label: 'Register No.', detail: registerNo),
-                      InfoCard(label: 'Parent Mobile', detail: parentMobile),
-                      InfoCard(label: 'Student Mobile', detail: studentMobile),
-                      InfoCard(label: 'Year', detail: year),
-                      InfoCard(label: 'Department', detail: department),
-                      InfoCard(label: 'Section', detail: section),
-                      InfoCard(label: 'Hostel', detail: hostel),
-                      InfoCard(label: 'Room No.', detail: roomNo),
-                    ],
-                  )
-                ),
-                const SizedBox(height: 10,),
-                SizedBox(
-                  width: 60,
-                  child: SmallButton(
-                    name: 'Ok', 
-                    onTap: () {
-                      Navigator.pop(context);
-                    }
+            backgroundColor: Colors.white,
+            surfaceTintColor: Colors.transparent,
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              height: 500,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                      width: 200,
+                      height: 400,
+                      child: ListView(
+                        children: [
+                          InfoCard(label: 'Name', detail: name),
+                          InfoCard(label: 'Register No.', detail: registerNo),
+                          InfoCard(
+                              label: 'Parent Mobile', detail: parentMobile),
+                          InfoCard(
+                              label: 'Student Mobile', detail: studentMobile),
+                          InfoCard(label: 'Year', detail: year),
+                          InfoCard(label: 'Department', detail: department),
+                          InfoCard(label: 'Section', detail: section),
+                          InfoCard(label: 'Hostel', detail: hostel),
+                          InfoCard(label: 'Room No.', detail: roomNo),
+                        ],
+                      )),
+                  const SizedBox(
+                    height: 10,
                   ),
-                )
-              ],
-            ),
-          )
-        );
+                  SizedBox(
+                    width: 60,
+                    child: SmallButton(
+                        name: 'Ok',
+                        onTap: () {
+                          Navigator.pop(context);
+                        }),
+                  )
+                ],
+              ),
+            ));
       },
     );
   }
 
-  Future<bool?> showConfirmationDialog(BuildContext context, String message) async {
+  Future<bool?> showConfirmationDialog(
+      BuildContext context, String message) async {
     return await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -79,13 +86,13 @@ class _WardenSubmissionContainerState extends State<WardenSubmissionContainer> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(true); 
+                Navigator.of(context).pop(true);
               },
               child: const Text('Yes'),
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(false); 
+                Navigator.of(context).pop(false);
               },
               child: const Text('No'),
             ),
@@ -137,144 +144,196 @@ class _WardenSubmissionContainerState extends State<WardenSubmissionContainer> {
           scrollDirection: Axis.horizontal,
           child: DataTable(
             border: const TableBorder(
-              verticalInside: BorderSide(
-                width: 2, 
-                style: BorderStyle.solid,
-                color: Color.fromRGBO(13, 71, 161, 1),
-              )
-            ),
+                verticalInside: BorderSide(
+              width: 2,
+              style: BorderStyle.solid,
+              color: Color.fromRGBO(13, 71, 161, 1),
+            )),
             columnSpacing: 30.0,
-            dividerThickness: 2, 
+            dividerThickness: 2,
             columns: [
-              DataColumn(label: Container(alignment: Alignment.center, child: const Text('Name'))),
-              DataColumn(label: Container(alignment: Alignment.center, child: const Text('Room No'))),
-              DataColumn(label: Container(alignment: Alignment.center, child: const Text('Out Date'))),
-              DataColumn(label: Container(alignment: Alignment.center, child: const Text('Out Time'))),
-              DataColumn(label: Container(alignment: Alignment.center, child: const Text('In Date'))),
-              DataColumn(label: Container(alignment: Alignment.center, child: const Text('In Time'))),
-              DataColumn(label: Container(alignment: Alignment.center, child: const Text('Purpose'))),
-              DataColumn(label: Container(alignment: Alignment.center, child: const Text('Advisor Status'))),
-              DataColumn(label: Container(alignment: Alignment.center, child: const Text('HoD Status'))),
-              DataColumn(label: Container(alignment: Alignment.center, child: const Text('Actions'))),
+              DataColumn(
+                  label: Container(
+                      alignment: Alignment.center, child: const Text('Name'))),
+              DataColumn(
+                  label: Container(
+                      alignment: Alignment.center,
+                      child: const Text('Room No'))),
+              DataColumn(
+                  label: Container(
+                      alignment: Alignment.center,
+                      child: const Text('Out Date'))),
+              DataColumn(
+                  label: Container(
+                      alignment: Alignment.center,
+                      child: const Text('Out Time'))),
+              DataColumn(
+                  label: Container(
+                      alignment: Alignment.center,
+                      child: const Text('In Date'))),
+              DataColumn(
+                  label: Container(
+                      alignment: Alignment.center,
+                      child: const Text('In Time'))),
+              DataColumn(
+                  label: Container(
+                      alignment: Alignment.center,
+                      child: const Text('Purpose'))),
+              DataColumn(
+                  label: Container(
+                      alignment: Alignment.center,
+                      child: const Text('Advisor Status'))),
+              DataColumn(
+                  label: Container(
+                      alignment: Alignment.center,
+                      child: const Text('HoD Status'))),
+              DataColumn(
+                  label: Container(
+                      alignment: Alignment.center,
+                      child: const Text('Actions'))),
             ],
             rows: widget.outpassList?.map((document) {
-              final data = document.data();
-              return DataRow(
-                cells: [
-                  DataCell(
-                    Center(child: Text(data['name'])),
-                  ),
-                  DataCell(
-                    Center(child: Text(data['room_no'])),
-                  ),
-                  DataCell(
-                    Center(child: Text(data['out_date'])),
-                  ),
-                  DataCell(
-                    Center(child: Text(data['out_time'])),
-                  ),
-                  DataCell(
-                    Center(child: Text(data['in_date'])),
-                  ),
-                  DataCell(
-                    Center(child: Text(data['in_time'])),
-                  ),
-                  DataCell(
-                    Center(child: Text(data['purpose'])),
-                  ),
-                  DataCell(
-                    Center(child: Text(currentStatus(data['advisor_status']))),
-                  ),
-                  DataCell(
-                    Center(child: Text(currentStatus(data['hod_status']))),
-                  ),
-                  DataCell(
-                    Center(
-                      child: Row(
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              String name = data['name'];
-                              String registerNo = data['register_no'];
-                              String year = currentYear(data['year']);
-                              String department = data['department'];
-                              String section = data['section'];
-                              String hostel = data['hostel'];
-                              String roomNo = data['room_no'];
-                              String studentMobile = data['student_mobile'].toString();
-                              String parentMobile = data['parent_mobile'].toString();
-                              showStudentDialog(context, name, registerNo, year, department, section, hostel, roomNo, studentMobile, parentMobile);
-                            }, 
-                            icon: Icon(
-                              Icons.person, 
-                              size: 30,
-                              color: Colors.blue[900],
-                            )
-                          ),
-                          const SizedBox(width: 10,),
-                          IconButton(
-                            onPressed: () async {
-                              bool? confirm = await showConfirmationDialog(context, "Are you sure to approve?");
-                              if (confirm != null && confirm) {
-                                UserDetails students = UserDetails();
-                                String id = await students.getStudentDocumentId(data['register_no']);
-                                print("Student document ID: $id");
-                                await updateWardenStatus(id, 1);
-                                setState(() {
-                                  widget.outpassList?.remove(document);
-                                });
-                              }
-                            }, 
-                            icon: const Icon(
-                              Icons.check_circle,
-                              size: 30,
-                              color: Colors.green,
-                            )
-                          ),
-                          const SizedBox(width: 10,),
-                          IconButton(
-                            onPressed: () async {
-                              bool? confirm = await showConfirmationDialog(context, "Are you sure to decline?");
-                              if (confirm != null && confirm) {
-                                UserDetails students = UserDetails();
-                                String id = await students.getStudentDocumentId(data['register_no']);
-                                print("Student document ID: $id");
-                                await updateWardenStatus(id, -1);
-                                setState(() {
-                                  widget.outpassList?.remove(document);
-                                });
-                              }
-                            }, 
-                            icon: const Icon(
-                              Icons.close, 
-                              size: 30,
-                              color: Colors.red,
-                            )
-                          ),
-                          const SizedBox(width: 10,),
-                          IconButton(
-                            onPressed: () async {
-                              bool? confirm = await showConfirmationDialog(context, "Are you sure to make Advisor and HoD status as NO NEED?\nThis cannot be undone.");
-                              if (confirm != null && confirm) {
-                                UserDetails students = UserDetails();
-                                String id = await students.getStudentDocumentId(data['register_no']);
-                                await noNeedUpdateStatus(id, 10);
-                                setState(() {});
-                              }
-                            }, 
-                            icon: Icon(
-                              Icons.visibility_off_rounded, 
-                              size: 30,
-                              color: Colors.grey[700],
-                            )
-                          ),
-                        ],
-                      )
-                    ),
-                  ),
-                ],
-              );
-            }).toList() ?? [],
+                  final data = document.data();
+                  return DataRow(
+                    cells: [
+                      DataCell(
+                        Center(child: Text(data['name'])),
+                      ),
+                      DataCell(
+                        Center(child: Text(data['room_no'])),
+                      ),
+                      DataCell(
+                        Center(child: Text(data['out_date'])),
+                      ),
+                      DataCell(
+                        Center(child: Text(data['out_time'])),
+                      ),
+                      DataCell(
+                        Center(child: Text(data['in_date'])),
+                      ),
+                      DataCell(
+                        Center(child: Text(data['in_time'])),
+                      ),
+                      DataCell(
+                        Center(child: Text(data['purpose'])),
+                      ),
+                      DataCell(
+                        Center(
+                            child: Text(currentStatus(data['advisor_status']))),
+                      ),
+                      DataCell(
+                        Center(child: Text(currentStatus(data['hod_status']))),
+                      ),
+                      DataCell(
+                        Center(
+                            child: Row(
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  String name = data['name'];
+                                  String registerNo = data['register_no'];
+                                  String year = currentYear(data['year']);
+                                  String department = data['department'];
+                                  String section = data['section'];
+                                  String hostel = data['hostel'];
+                                  String roomNo = data['room_no'];
+                                  String studentMobile =
+                                      data['student_mobile'].toString();
+                                  String parentMobile =
+                                      data['parent_mobile'].toString();
+                                  showStudentDialog(
+                                      context,
+                                      name,
+                                      registerNo,
+                                      year,
+                                      department,
+                                      section,
+                                      hostel,
+                                      roomNo,
+                                      studentMobile,
+                                      parentMobile);
+                                },
+                                icon: Icon(
+                                  Icons.person,
+                                  size: 30,
+                                  color: Colors.blue[900],
+                                )),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            IconButton(
+                                onPressed: () async {
+                                  bool? confirm = await showConfirmationDialog(
+                                      context, "Are you sure to approve?");
+                                  if (confirm != null && confirm) {
+                                    UserDetails students = UserDetails();
+                                    String id =
+                                        await students.getStudentDocumentId(
+                                            data['register_no']);
+                                    print("Student document ID: $id");
+                                    await updateWardenStatus(id, 1);
+                                    setState(() {
+                                      widget.outpassList?.remove(document);
+                                    });
+                                  }
+                                },
+                                icon: const Icon(
+                                  Icons.check_circle,
+                                  size: 30,
+                                  color: Colors.green,
+                                )),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            IconButton(
+                                onPressed: () async {
+                                  bool? confirm = await showConfirmationDialog(
+                                      context, "Are you sure to decline?");
+                                  if (confirm != null && confirm) {
+                                    UserDetails students = UserDetails();
+                                    String id =
+                                        await students.getStudentDocumentId(
+                                            data['register_no']);
+                                    print("Student document ID: $id");
+                                    await updateWardenStatus(id, -1);
+                                    setState(() {
+                                      widget.outpassList?.remove(document);
+                                    });
+                                  }
+                                },
+                                icon: const Icon(
+                                  Icons.close,
+                                  size: 30,
+                                  color: Colors.red,
+                                )),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            IconButton(
+                                onPressed: () async {
+                                  bool? confirm = await showConfirmationDialog(
+                                      context,
+                                      "Are you sure to make Advisor and HoD status as NO NEED?\nThis cannot be undone.");
+                                  if (confirm != null && confirm) {
+                                    UserDetails students = UserDetails();
+                                    String id =
+                                        await students.getStudentDocumentId(
+                                            data['register_no']);
+                                    await noNeedUpdateStatus(id, 10);
+                                  }
+                                },
+                                icon: Icon(
+                                  Icons.visibility_off_outlined,
+                                  size: 30,
+                                  color: Colors.orange[500],
+                                )),
+                          ],
+                        )),
+                      ),
+                    ],
+                  );
+                }).toList() ??
+                [],
           ),
         ),
       ),

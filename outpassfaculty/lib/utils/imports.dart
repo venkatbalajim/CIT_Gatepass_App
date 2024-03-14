@@ -119,3 +119,5 @@ import 'package:excel/excel.dart';
 export 'package:excel/excel.dart' hide CellStyle, BorderStyle, Border;
 import 'package:file_picker/file_picker.dart';
 export 'package:file_picker/file_picker.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+export 'package:device_info_plus/device_info_plus.dart';

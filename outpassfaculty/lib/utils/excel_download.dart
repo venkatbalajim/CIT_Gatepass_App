@@ -5,11 +5,34 @@ import 'imports.dart';
 class ExcelGenerator {
 
   Future<void> requestPermission(BuildContext context) async {
-    final status = await Permission.storage.request();
-    if (status.isGranted) {
-      generateCSV(context);
+    if (Platform.isAndroid) {
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      int? version = int.tryParse(androidInfo.version.release);
+      if (version != null && version <= 12) {
+        PermissionStatus status1 = await Permission.storage.request();
+        if (status1 == PermissionStatus.granted) {
+          generateCSV(context);
+        } else {
+          CustomSnackBar.showExitSnackBar(context, 'Storage permission denied.');
+        }
+      } else {
+        PermissionStatus status2 = await Permission.manageExternalStorage.request();
+        if (status2 == PermissionStatus.granted) {
+          generateCSV(context);
+        } else {
+          CustomSnackBar.showExitSnackBar(context, 'Storage permission denied.');
+        }
+      }
+    } else if (Platform.isIOS) {
+      PermissionStatus status = await Permission.storage.request();
+      if (status == PermissionStatus.granted || status == PermissionStatus.limited) {
+        generateCSV(context);
+      } else {
+        CustomSnackBar.showExitSnackBar(context, 'Storage permission denied.');
+      }
     } else {
-      print("Permission denied. Unable to save the file.");
+      CustomSnackBar.showExitSnackBar(context, 'Sorry, OS not supported.');
     }
   }
 

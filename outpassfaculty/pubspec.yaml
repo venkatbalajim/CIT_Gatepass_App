@@ -9,30 +9,31 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: 
-  google_sign_in: 
+  cupertino_icons: ^1.0.6
+  google_sign_in: ^6.2.1
   google_fonts: 6.1.0
-  firebase_core: 
-  firebase_auth: 
-  cloud_firestore: 
-  intl: 
-  connectivity_plus: 
-  firebase_messaging: 
-  cloud_functions: 
-  shared_preferences:
-  syncfusion_flutter_xlsio: 
-  open_file:
-  permission_handler:
-  path_provider:
-  csv: 
-  file_picker: 
-  excel: 
+  firebase_core: ^2.27.0
+  firebase_auth: ^4.17.8
+  cloud_firestore: ^4.15.8
+  intl: ^0.19.0
+  connectivity_plus: ^5.0.2
+  firebase_messaging: ^14.7.19
+  cloud_functions: ^4.6.8
+  shared_preferences: ^2.2.2
+  syncfusion_flutter_xlsio: ^24.2.9
+  open_file: ^3.3.2
+  permission_handler: ^11.3.0
+  path_provider: ^2.1.2
+  csv: ^6.0.0
+  file_picker: ^6.2.0
+  excel: ^4.0.2
+  device_info_plus: ^9.1.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: 
-  flutter_launcher_icons: 
+  flutter_lints: ^3.0.1
+  flutter_launcher_icons: ^0.13.1
 
 flutter_launcher_icons:
   android: "launcher_icon"

@@ -320,6 +320,21 @@ class _DatabasePageState extends State<DatabasePage> {
 }
 
 Future<bool> requestStoragePermission() async {
-  PermissionStatus status = await Permission.storage.request();
-  return status == PermissionStatus.granted;
+  if (Platform.isAndroid) {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    int? version = int.tryParse(androidInfo.version.release);
+    if (version != null && version <= 12) {
+      PermissionStatus status1 = await Permission.storage.request();
+      return status1 == PermissionStatus.granted;
+    } else {
+      PermissionStatus status2 = await Permission.manageExternalStorage.request();
+      return status2 == PermissionStatus.granted;
+    }
+  } else if (Platform.isIOS) {
+    PermissionStatus status = await Permission.storage.request();
+    return (status == PermissionStatus.granted || status == PermissionStatus.limited);
+  } else {
+    return false;
+  }
 }
