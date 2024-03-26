@@ -1,12 +1,12 @@
-# CIT Hostel Outpass App
+# CIT Hostel Gatepass App
 
-CIT Hostel Outpass App, developed using Flutter and Firebase, simplifies the gate-pass approval process for students and faculties at Chennai Institute of Technology.
+CIT Hostel Gatepass App, developed using Flutter and Firebase, simplifies the gate-pass approval process for students and faculties at Chennai Institute of Technology.
 
 ## Features
 
 - User-friendly interface for students and faculties.
 - Efficient communication and approval process.
-- Digital record-keeping of outpasses for easy access.
+- Digital record-keeping of gate passes for easy access.
 
 ## Tech Stack
 
