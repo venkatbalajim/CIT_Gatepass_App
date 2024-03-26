@@ -1,6 +1,6 @@
-# Outpass App Project
+# CIT Hostel Outpass App
 
-The Outpass App, developed using Flutter and Firebase, simplifies the Outpass approval process for students and faculties at Chennai Institute of Technology.
+CIT Hostel Outpass App, developed using Flutter and Firebase, simplifies the gate-pass approval process for students and faculties at Chennai Institute of Technology.
 
 ## Features
 
@@ -10,7 +10,5 @@ The Outpass App, developed using Flutter and Firebase, simplifies the Outpass ap
 
 ## Tech Stack
 
-- **Flutter:** Chosen for its cross-platform development capabilities, enabling the app to run seamlessly on both iOS and Android devices.
+- **Flutter:** Chosen for its cross-platform development capabilities, enabling the app to run seamlessly on iOS and Android devices.
 - **Firebase:** Utilized for real-time Cloud Firestore database, FCM for push notifications, and Cloud Functions for enhanced functionality.
-
-**NOTE:** The apps for students, faculties, and security are still in development. This README will be updated regularly with the latest information.
