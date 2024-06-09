@@ -10,7 +10,7 @@ class ScannerPage extends StatefulWidget {
 }
 
 class _ScannerPageState extends State<ScannerPage> {
-  String errorMessage = "Failed to scan QR Code. ";
+  String errorMessage = "No Outpass QR Code Scanned.";
   Map<String, dynamic>? userData;
   final TextEditingController passwordController = TextEditingController();
 
@@ -59,19 +59,16 @@ class _ScannerPageState extends State<ScannerPage> {
                 Align(
                   alignment: Alignment.center,
                   child: Container(
-                    width: 150, height: 150,
+                    width: 150,
+                    height: 150,
                     decoration: BoxDecoration(
-                      color: Colors.green[600],
-                      borderRadius: BorderRadius.circular(100)
-                    ),
+                        color: Colors.green[600],
+                        borderRadius: BorderRadius.circular(100)),
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(16),
                     child: Text(
                       badgeNumber(userData!['depart_status']),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 75
-                      ),
+                      style: const TextStyle(color: Colors.white, fontSize: 75),
                     ),
                   ),
                 ),
@@ -84,7 +81,7 @@ class _ScannerPageState extends State<ScannerPage> {
                     style: TextStyle(
                         color: Colors.grey[800],
                         fontSize: 15,
-                        fontWeight: FontWeight.w500),
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -100,20 +97,23 @@ class _ScannerPageState extends State<ScannerPage> {
                   alignment: Alignment.center,
                   child: SizedBox(
                     width: 150,
-                    child: SmallButton(name: "Verify", onTap: () async {
-                      showLoadingDialog();
-                      UserDetails securityUser = UserDetails();
-                      final password = await securityUser.fetchPassword();
-                      String enteredPassword = passwordController.text;
-                      if (password == enteredPassword) {
-                        await Validation.updateStatus(context, decodedText);
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, '/options');
-                      } else {
-                        Navigator.pop(context);
-                        showErrorDialog(context, "Invalid Password");
-                      }
-                    }),
+                    child: SmallButton(
+                        name: "Verify",
+                        onTap: () async {
+                          showLoadingDialog();
+                          UserDetails securityUser = UserDetails();
+                          final password = await securityUser.fetchPassword();
+                          String enteredPassword = passwordController.text;
+                          if (password == enteredPassword) {
+                            await Validation.updateStatus(context, decodedText);
+                            Navigator.pop(context);
+                            Navigator.pushNamed(context, '/options');
+                          } else {
+                            Navigator.pop(context);
+                            showErrorDialog(
+                                context, "Enter the correct password");
+                          }
+                        }),
                   ),
                 ),
                 const SizedBox(height: 40),
@@ -137,7 +137,7 @@ class _ScannerPageState extends State<ScannerPage> {
       return "No";
     } else if (status == 1) {
       return "Yes";
-    } 
+    }
     return null;
   }
 
@@ -154,39 +154,37 @@ class _ScannerPageState extends State<ScannerPage> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return  const Center(
+        return const Center(
           child: Dialog(
-            backgroundColor: Colors.white,
-            surfaceTintColor: Colors.transparent,
-            child: SizedBox(
-              width: 250,
-              height: 200,
-              child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: 50),
-                CircularProgressIndicator(
-                  color: Color.fromRGBO(13, 71, 161, 1),
+              backgroundColor: Colors.white,
+              surfaceTintColor: Colors.transparent,
+              child: SizedBox(
+                width: 250,
+                height: 200,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 50),
+                    CircularProgressIndicator(
+                      color: Color.fromRGBO(13, 71, 161, 1),
+                    ),
+                    SizedBox(height: 30),
+                    Text(
+                      "Please wait a moment",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                  ],
                 ),
-                SizedBox(height: 30),
-                Text(
-                  "Please wait a moment",
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                SizedBox(height: 20),
-              ],
-            ),
-            )
-          ),
+              )),
         );
       },
     );
   }
 
   Widget outpassDetails() {
-
     return Container(
       padding: const EdgeInsets.fromLTRB(30, 20, 30, 10),
       decoration: BoxDecoration(
@@ -201,6 +199,12 @@ class _ScannerPageState extends State<ScannerPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          InfoCard(
+              label: 'Depart Status',
+              detail: currentStatus(userData!['depart_status'])),
+          InfoCard(
+              label: 'Arrival Status',
+              detail: currentStatus(userData!['arrival_status'])),
           InfoCard(label: 'Name', detail: userData!['name']),
           InfoCard(label: 'Department', detail: userData!['department']),
           InfoCard(label: 'Year', detail: userData!['year']),
@@ -211,8 +215,6 @@ class _ScannerPageState extends State<ScannerPage> {
           InfoCard(label: 'Out time', detail: userData!['out_time']),
           InfoCard(label: 'In date', detail: userData!['in_date']),
           InfoCard(label: 'In time', detail: userData!['in_time']),
-          InfoCard(label: 'Depart Status', detail: currentStatus(userData!['depart_status'])),
-          InfoCard(label: 'Arrival Status', detail: currentStatus(userData!['arrival_status'])),
         ],
       ),
     );
@@ -222,9 +224,7 @@ class _ScannerPageState extends State<ScannerPage> {
     return Text(
       errorMessage,
       textAlign: TextAlign.center,
-      style: const TextStyle(
-        fontSize: 15,
-      ),
+      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
     );
   }
 
@@ -279,7 +279,7 @@ class _ScannerPageState extends State<ScannerPage> {
           backgroundColor: Colors.white,
           surfaceTintColor: Colors.transparent,
           child: Container(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.all(20),
             width: 250,
             height: 200,
             child: Column(
@@ -290,18 +290,20 @@ class _ScannerPageState extends State<ScannerPage> {
                   message,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontSize: 18,
-                  ),
+                      fontSize: 18,
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
                 SizedBox(
-                  width: 80,
+                  width: 50,
                   child: SmallButton(
-                  onTap: () {
-                    Navigator.popUntil(context, (route) => route.settings.name == '/scanner');
-                  },
-                  name: 'Ok',
-                ),
+                    onTap: () {
+                      Navigator.popUntil(context,
+                          (route) => route.settings.name == '/scanner');
+                    },
+                    name: 'Ok',
+                  ),
                 )
               ],
             ),
@@ -327,33 +329,40 @@ class _ScannerPageState extends State<ScannerPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  width: 150, height: 150,
+                  width: 150,
+                  height: 150,
                   decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(100)
-                  ),
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(100)),
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(16),
-                  child: const Icon(Icons.close, color: Colors.white, size: 100,),
+                  child: const Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 100,
+                  ),
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 const Text(
                   "Invalid Outpass QR Code",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 17,
-                    color: Colors.red
-                  ),
+                      fontSize: 17,
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 40),
                 SizedBox(
-                  width: 80,
+                  width: 60,
                   child: SmallButton(
-                  onTap: () {
-                    Navigator.popUntil(context, (route) => route.settings.name == '/options');
-                  },
-                  name: 'Ok',
-                ),
+                    onTap: () {
+                      Navigator.popUntil(context,
+                          (route) => route.settings.name == '/options');
+                    },
+                    name: 'Ok',
+                  ),
                 )
               ],
             ),
@@ -362,5 +371,4 @@ class _ScannerPageState extends State<ScannerPage> {
       },
     );
   }
-
 }

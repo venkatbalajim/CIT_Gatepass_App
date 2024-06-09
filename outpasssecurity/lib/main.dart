@@ -24,8 +24,10 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: Routes.getRoutes(),
       theme: ThemeData(
-        textTheme: GoogleFonts.poppinsTextTheme(),
-      ),
+          textTheme: GoogleFonts.poppinsTextTheme(),
+          textSelectionTheme: TextSelectionThemeData(
+              selectionHandleColor: Colors.blue[900],
+              selectionColor: Colors.blue[200])),
     );
   }
 }

@@ -8,33 +8,30 @@ class PasswordField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 180, 
-      height: 50,
+      width: 150,
       child: TextField(
         cursorColor: Colors.blue[900],
+        cursorWidth: 2,
         controller: controller,
         textAlign: TextAlign.center,
-        maxLength: 4, 
+        maxLength: 4,
+        style: const TextStyle(
+          fontSize: 20,
+        ),
         keyboardType: TextInputType.number,
         obscureText: true,
         decoration: const InputDecoration(
           hintText: 'Password',
-          hintStyle: TextStyle(
-            fontSize: 14,
-          ),
-          counterText: '', 
+          hintStyle: TextStyle(fontSize: 17),
+          counterText: '',
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Color.fromRGBO(13, 71, 161, 1),
-              width: 2,
-            )
-          ),
+              borderSide: BorderSide(
+            color: Color.fromRGBO(13, 71, 161, 1),
+            width: 2,
+          )),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Color.fromRGBO(13, 71, 161, 1),
-              width: 2
-            )
-          ),
+              borderSide:
+                  BorderSide(color: Color.fromRGBO(13, 71, 161, 1), width: 2)),
         ),
       ),
     );
