@@ -8,40 +8,20 @@ class FirestoreService {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return Dialog(
+        return AlertDialog(
           backgroundColor: Colors.white,
           surfaceTintColor: Colors.transparent,
-          child: SizedBox(
-            width: 250,
-            height: 200,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  message,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                  child: const Text("Ok"),
-                ),
-              ],
-            ),
-          ),
+          title: const Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => const HomePage()));
+              },
+              child: Text('OK', style: TextStyle(color: Colors.blue[900])),
+            )
+          ],
         );
       },
     );
@@ -51,7 +31,8 @@ class FirestoreService {
     return DateFormat('dd-MM-yyyy').format(date);
   }
 
-  Future<void> saveOutpassDetails(BuildContext context, SaveOutpassDetails outpassDetails) async {
+  Future<void> saveOutpassDetails(
+      BuildContext context, SaveOutpassDetails outpassDetails) async {
     try {
       var connectivityResult = await Connectivity().checkConnectivity();
 
@@ -82,10 +63,10 @@ class FirestoreService {
             'is_submitted': 1,
             'submit_date': outpassDetails.date,
           });
-          Navigator.pushNamed(context, '/status');
         }
       } else {
-        showErrorDialog(context, "No internet connection. Please check your connection and try again.");
+        showErrorDialog(context,
+            "No internet connection. Please check your connection and try again.");
       }
     } catch (e) {
       showErrorDialog(context, "Something went wrong. Please try again later.");

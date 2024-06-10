@@ -8,7 +8,6 @@ class StatusPage extends StatefulWidget {
 }
 
 class _StatusPageState extends State<StatusPage> {
-  
   UserDetails userDetails = UserDetails();
   StatusValidation statusCheck = StatusValidation();
 
@@ -17,40 +16,20 @@ class _StatusPageState extends State<StatusPage> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return Dialog(
+        return AlertDialog(
           backgroundColor: Colors.white,
           surfaceTintColor: Colors.transparent,
-          child: SizedBox(
-            width: 250,
-            height: 200,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  message,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 13,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                  child: const Text("Ok"),
-                ),
-              ],
-            ),
-          ),
+          title: const Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => const HomePage()));
+              },
+              child: Text('OK', style: TextStyle(color: Colors.blue[900])),
+            )
+          ],
         );
       },
     );
@@ -67,7 +46,8 @@ class _StatusPageState extends State<StatusPage> {
     }
   }
 
-  Future<bool?> showConfirmationDialog(BuildContext context, String message) async {
+  Future<bool?> showConfirmationDialog(
+      BuildContext context, String message) async {
     return await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -79,15 +59,15 @@ class _StatusPageState extends State<StatusPage> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(true); 
+                Navigator.of(context).pop(true);
               },
-              child: const Text('Yes'),
+              child: Text('Yes', style: TextStyle(color: Colors.blue[900])),
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(false); 
+                Navigator.of(context).pop(false);
               },
-              child: const Text('No'),
+              child: Text('No', style: TextStyle(color: Colors.blue[900])),
             ),
           ],
         );
@@ -103,67 +83,91 @@ class _StatusPageState extends State<StatusPage> {
 
     return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>?>(
       future: userDetails.getUserDetails(currentUserEmail!),
-      builder: (context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>?> snapshot) {
+      builder: (context,
+          AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>?> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: Dialog(
-              backgroundColor: Colors.white,
-              surfaceTintColor: Colors.transparent,
-              child: SizedBox(
-                width: 250,
-                height: 200,
-                child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(height: 50),
-                  CircularProgressIndicator(
-                    color: Color.fromRGBO(13, 71, 161, 1),
+                backgroundColor: Colors.white,
+                surfaceTintColor: Colors.transparent,
+                child: SizedBox(
+                  width: 250,
+                  height: 200,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 50),
+                      CircularProgressIndicator(
+                        color: Color.fromRGBO(13, 71, 161, 1),
+                      ),
+                      SizedBox(height: 30),
+                      Text(
+                        "Please wait a moment",
+                        style: TextStyle(
+                          fontSize: 17,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                    ],
                   ),
-                  SizedBox(height: 30),
-                  Text(
-                    "Please wait a moment",
-                    style: TextStyle(
-                      fontSize: 17,
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                ],
-              ),
-              )
-            ),
+                )),
           );
         } else if (snapshot.hasError) {
-          showErrorDialog(context, "Sorry, an error occurred. Please try later.");
+          showErrorDialog(
+              context, "Sorry, an error occurred. Please try later.");
           return const SizedBox();
         } else {
           Map<String, dynamic> userData = snapshot.data!.data()!;
-          String? buttonName = statusCheck.buttonName(userData['advisor_status'], userData['hod_status'], userData['warden_status']);
-          String? outpassStatus = statusCheck.outpassStatus(userData['advisor_status'], userData['hod_status'], userData['warden_status']);
+          String docId = snapshot.data!.id;
+          int advisor = userData['advisor_status'];
+          int hod = userData['hod_status'];
+          int warden = userData['warden_status'];
+          int? result = statusCheck.checkStatus(advisor, hod, warden);
+          String? buttonName = statusCheck.buttonName(
+              userData['advisor_status'],
+              userData['hod_status'],
+              userData['warden_status']);
+          String? outpassStatus = statusCheck.outpassStatus(
+              userData['advisor_status'],
+              userData['hod_status'],
+              userData['warden_status']);
           return SafeArea(
             child: RefreshIndicator(
-              backgroundColor: Colors.blue[900],
-              color: Colors.white,
-              onRefresh: () async {
-                await userDetails.getUserDetails(currentUserEmail);
-                await Future.delayed(const Duration(seconds: 1));
-                setState(() {});
-              },
-              // ignore: deprecated_member_use
-              child: WillPopScope(
-                onWillPop: () async {
-                  Navigator.popUntil(context, (route) => route.settings.name == '/options');
-                  return true;
+                backgroundColor: Colors.blue[900],
+                color: Colors.white,
+                onRefresh: () async {
+                  await userDetails.getUserDetails(currentUserEmail);
+                  await Future.delayed(const Duration(seconds: 1));
+                  setState(() {});
                 },
-                child: Scaffold(
-                  body: ListView(
-                    children: [
-                        Center(
+                // ignore: deprecated_member_use
+                child: WillPopScope(
+                  onWillPop: () async {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomePage()));
+                    return true;
+                  },
+                  child: Scaffold(
+                    body:
+                        ListView(padding: const EdgeInsets.all(30), children: [
+                      Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const SizedBox(height: 30,),
+                            Text(
+                              "Outpass Status",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 25,
+                                color: Colors.blue[900],
+                              ),
+                            ),
+                            const SizedBox(height: 20),
                             Container(
-                              padding: const EdgeInsets.fromLTRB(30, 20, 30, 10),
+                              padding:
+                                  const EdgeInsets.fromLTRB(30, 20, 30, 10),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
                                 border: Border.all(
@@ -185,16 +189,30 @@ class _StatusPageState extends State<StatusPage> {
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  const SizedBox(height: 30,),
-                                  InfoCard(label: 'Class Advisor', detail: statusCheck.currentStatus(userData['advisor_status'])),
-                                  InfoCard(label: 'HoD', detail: statusCheck.currentStatus(userData['hod_status'])),
-                                  InfoCard(label: 'Hostel Warden', detail: statusCheck.currentStatus(userData['warden_status'])),
+                                  const SizedBox(
+                                    height: 30,
+                                  ),
+                                  InfoCard(
+                                      label: 'Class Advisor',
+                                      detail: statusCheck.currentStatus(
+                                          userData['advisor_status'])),
+                                  InfoCard(
+                                      label: 'HoD',
+                                      detail: statusCheck.currentStatus(
+                                          userData['hod_status'])),
+                                  InfoCard(
+                                      label: 'Hostel Warden',
+                                      detail: statusCheck.currentStatus(
+                                          userData['warden_status'])),
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 20,),
+                            const SizedBox(
+                              height: 20,
+                            ),
                             Container(
-                              padding: const EdgeInsets.fromLTRB(30, 20, 30, 10),
+                              padding:
+                                  const EdgeInsets.fromLTRB(30, 20, 30, 10),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
                                 border: Border.all(
@@ -211,46 +229,66 @@ class _StatusPageState extends State<StatusPage> {
                                     "Outpass Preview",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      color: Colors.blue[900],
-                                      fontSize: 20,
-                                    ),
+                                        color: Colors.blue[900],
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                  const SizedBox(height: 30,),
-                                  InfoCard(label: 'Submit date', detail: userData['submit_date']),
-                                  InfoCard(label: 'Purpose', detail: userData['purpose']),
-                                  InfoCard(label: 'Out date', detail: userData['out_date']),
-                                  InfoCard(label: 'Out time', detail: userData['out_time']),
-                                  InfoCard(label: 'In date', detail: userData['in_date']),
-                                  InfoCard(label: 'In time', detail: userData['in_time']),
+                                  const SizedBox(
+                                    height: 30,
+                                  ),
+                                  InfoCard(
+                                      label: 'Submit date',
+                                      detail: userData['submit_date']),
+                                  InfoCard(
+                                      label: 'Purpose',
+                                      detail: userData['purpose']),
+                                  InfoCard(
+                                      label: 'Out date',
+                                      detail: userData['out_date']),
+                                  InfoCard(
+                                      label: 'Out time',
+                                      detail: userData['out_time']),
+                                  InfoCard(
+                                      label: 'In date',
+                                      detail: userData['in_date']),
+                                  InfoCard(
+                                      label: 'In time',
+                                      detail: userData['in_time']),
                                 ],
                               ),
                             ),
                             const SizedBox(height: 20),
-                            SmallButton(name: buttonName!, onTap: () {
-                              int advisor = userData['advisor_status'];
-                              int hod = userData['hod_status'];
-                              int warden = userData['warden_status'];
-                              int? result = statusCheck.checkStatus(advisor, hod, warden);
-                              statusCheck.nextPage(context, result!);
-                            }),
-                            const SizedBox(height: 20),
-                            SmallButton(name: 'Cancel Outpass', onTap: () async {
-                              bool? confirm = await showConfirmationDialog(context, "Are you sure to cancel your outpass? This cannot be undone.");
-                              if (confirm != null && confirm) {
-                                QRValidation validation = QRValidation();
-                                // ignore: use_build_context_synchronously
-                                validation.eraseAll(context);
-                              }
-                            }),
+                            const InstructionCard(
+                                instruction:
+                                    "If your outpass status is DECLINED, click CANCEL OUTPASS to submit new outpass."),
+                            const SizedBox(height: 10),
+                            if (result == 1)
+                              GetQRButton(
+                                  name: buttonName!,
+                                  onTap: () {
+                                    statusCheck.nextPage(
+                                        context, result!, docId);
+                                  }),
+                            const SizedBox(height: 10),
+                            CancelButton(
+                                name: 'Cancel Outpass',
+                                onTap: () async {
+                                  bool? confirm = await showConfirmationDialog(
+                                      context,
+                                      "Are you sure to cancel your outpass? This cannot be undone.");
+                                  if (confirm != null && confirm) {
+                                    QRValidation validation = QRValidation();
+                                    // ignore: use_build_context_synchronously
+                                    validation.eraseAll(context);
+                                  }
+                                }),
                             const SizedBox(height: 40),
                           ],
                         ),
                       ),
-                    ]
+                    ]),
                   ),
-                ), 
-              )
-            ),
+                )),
           );
         }
       },

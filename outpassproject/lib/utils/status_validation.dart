@@ -1,7 +1,6 @@
 import '../utils/imports.dart';
 
 class StatusValidation {
-
   String currentStatus(int status) {
     if (status == 0) {
       return "Pending";
@@ -19,13 +18,13 @@ class StatusValidation {
     if (a == -1 || b == -1 || c == -1) {
       return -1;
     }
-    if (a==10) a = 1;
-    if (b==10) b = 1;
+    if (a == 10) a = 1;
+    if (b == 10) b = 1;
     if (a == b && b == c && c == a && a == 1) {
       return 1;
     } else if (a == 0 || b == 0 || c == 0) {
       return 0;
-    } 
+    }
     return null;
   }
 
@@ -33,13 +32,13 @@ class StatusValidation {
     if (a == -1 || b == -1 || c == -1) {
       return "Declined";
     }
-    if (a==10) a = 1;
-    if (b==10) b = 1;
+    if (a == 10) a = 1;
+    if (b == 10) b = 1;
     if (a == b && b == c && c == a && a == 1) {
       return "Approved";
     } else if (a == 0 || b == 0 || c == 0) {
       return "Pending";
-    } 
+    }
     return null;
   }
 
@@ -54,14 +53,13 @@ class StatusValidation {
     return null;
   }
 
-  void nextPage(BuildContext context, int? check) async {
+  void nextPage(BuildContext context, int? check, String docId) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
     String? currentUserEmail = user!.email;
     UserDetails userDetails = UserDetails();
 
     if (check == 1) {
-
       final document = await userDetails.getUserDetails(currentUserEmail!);
       if (document != null) {
         final userDocumentReference = document.reference;
@@ -69,20 +67,25 @@ class StatusValidation {
           'is_submitted': 2,
           'depart_status': 0,
           'arrival_status': 0,
-        }).whenComplete(
-          () => // ignore: use_build_context_synchronously
-          Navigator.pushNamed(context, '/outpassqr')
-        );
+        }).whenComplete(() => // ignore: use_build_context_synchronously
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomePage(),
+                )));
       }
     } else if (check == 0) {
-      Navigator.popUntil(context, (route) => route.settings.name == '/options');
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomePage(),
+          ));
     } else if (check == -1) {
-      
       final document = await userDetails.getUserDetails(currentUserEmail!);
 
       if (document != null) {
         final userDocumentReference = document.reference;
-        
+
         userDocumentReference.update({
           'submit_date': FieldValue.delete(),
           'purpose': FieldValue.delete(),
@@ -105,12 +108,13 @@ class StatusValidation {
           'depart_time': FieldValue.delete(),
           'arrival_date': FieldValue.delete(),
           'arrival_time': FieldValue.delete(),
-        }).whenComplete(
-          () => // ignore: use_build_context_synchronously
-          Navigator.popUntil(context, (route) => route.settings.name == '/options')
-        );
+        }).whenComplete(() => // ignore: use_build_context_synchronously
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomePage(),
+                )));
       }
     }
   }
-
 }

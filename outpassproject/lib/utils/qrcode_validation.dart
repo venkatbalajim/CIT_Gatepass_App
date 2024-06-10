@@ -1,7 +1,6 @@
 import '../utils/imports.dart';
 
 class QRValidation {
-
   String departureStatus(int status) {
     if (status == 1) {
       return "Yes";
@@ -17,7 +16,6 @@ class QRValidation {
   }
 
   void eraseAll(BuildContext context) async {
-
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
     String? currentUserEmail = user!.email;
@@ -47,11 +45,8 @@ class QRValidation {
         'depart_time': FieldValue.delete(),
         'arrival_date': FieldValue.delete(),
         'arrival_time': FieldValue.delete(),
-      }).whenComplete(
-        () => 
-        Navigator.popUntil(context, (route) => route.settings.name == '/options'));
+      }).whenComplete(() => Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const HomePage())));
     }
-
   }
-  
 }

@@ -25,13 +25,8 @@ class UserDetails {
     final userCollection = FirebaseFirestore.instance.collection('users');
 
     try {
-      final userQuery = await userCollection.where('register_no', isEqualTo: value).get();
-
-      if (userQuery.docs.isNotEmpty) {
-        return userQuery.docs.first.data();
-      } else {
-        return null;
-      }
+      final userQuery = await userCollection.doc(value).get();
+      return userQuery.data();
     } catch (e) {
       rethrow;
     }

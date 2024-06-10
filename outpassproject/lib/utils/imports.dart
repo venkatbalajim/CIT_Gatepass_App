@@ -13,6 +13,8 @@ import 'package:outpassapp/pages/status_page.dart';
 export 'package:outpassapp/pages/status_page.dart';
 import 'package:outpassapp/pages/qr_page.dart';
 export 'package:outpassapp/pages/qr_page.dart';
+import 'package:outpassapp/pages/settings_page.dart';
+export 'package:outpassapp/pages/settings_page.dart';
 
 // Services
 import 'package:outpassapp/services/authentication.dart';
@@ -43,22 +45,22 @@ import 'package:outpassapp/widgets/common_widgets/info_card.dart';
 export 'package:outpassapp/widgets/common_widgets/info_card.dart';
 import 'package:outpassapp/widgets/common_widgets/small_button.dart';
 export 'package:outpassapp/widgets/common_widgets/small_button.dart';
-import 'package:outpassapp/widgets/home_page/home_button.dart';
-export 'package:outpassapp/widgets/home_page/home_button.dart';
+import 'package:outpassapp/widgets/common_widgets/cancel_button.dart';
+export 'package:outpassapp/widgets/common_widgets/cancel_button.dart';
+import 'package:outpassapp/widgets/status_page/get_qr_button.dart';
+export 'package:outpassapp/widgets/status_page/get_qr_button.dart';
 import 'package:outpassapp/widgets/profile_page/instruction_card.dart';
 export 'package:outpassapp/widgets/profile_page/instruction_card.dart';
 import 'package:outpassapp/widgets/welcome_page/sign_in_button.dart';
 export 'package:outpassapp/widgets/welcome_page/sign_in_button.dart';
-import 'package:outpassapp/widgets/welcome_page/snack_bar.dart';
-export 'package:outpassapp/widgets/welcome_page/snack_bar.dart';
+import 'package:outpassapp/widgets/home_page/snack_bar.dart';
+export 'package:outpassapp/widgets/home_page/snack_bar.dart';
 import 'package:outpassapp/widgets/outpass_page/dropdown.dart';
 export 'package:outpassapp/widgets/outpass_page/dropdown.dart';
 import 'package:outpassapp/widgets/outpass_page/date_picker.dart';
 export 'package:outpassapp/widgets/outpass_page/date_picker.dart';
 import 'package:outpassapp/widgets/outpass_page/time_picker.dart';
 export 'package:outpassapp/widgets/outpass_page/time_picker.dart';
-import 'package:outpassapp/widgets/qrcode_page/reg_no_field.dart';
-export 'package:outpassapp/widgets/qrcode_page/reg_no_field.dart';
 
 // Dart Packages
 import 'dart:convert';

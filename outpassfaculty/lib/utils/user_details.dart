@@ -158,7 +158,6 @@ class UserDetails {
               'warden_status',
               isNotEqualTo: -1,
             )
-            .orderBy('submit_date')
             .get();
       } else {
         query = await userCollection
@@ -182,7 +181,6 @@ class UserDetails {
               'warden_status',
               isNotEqualTo: -1,
             )
-            .orderBy('submit_date')
             .get();
       }
       userQuery = query;
@@ -196,7 +194,6 @@ class UserDetails {
             'warden_status',
             isEqualTo: 0,
           )
-          .orderBy('submit_date')
           .get();
     } else {
       return null;

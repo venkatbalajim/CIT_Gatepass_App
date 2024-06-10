@@ -3,7 +3,6 @@
 import '../utils/imports.dart';
 
 class Validation {
-
   static void showErrorDialog(BuildContext context, String message) {
     showDialog(
       context: context,
@@ -27,7 +26,8 @@ class Validation {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.popUntil(context, (route) => route.settings.name == '/scanner');
+                    Navigator.popUntil(
+                        context, (route) => route.settings.name == '/scanner');
                   },
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all(
@@ -52,39 +52,49 @@ class Validation {
 
   static String _formatTime(TimeOfDay time) {
     final now = DateTime.now();
-    final dateTime = DateTime(now.year, now.month, now.day, time.hour, time.minute);
+    final dateTime =
+        DateTime(now.year, now.month, now.day, time.hour, time.minute);
     final formattedTime = DateFormat.jm().format(dateTime);
     return formattedTime;
   }
 
-  static Future<void> updateStatus(BuildContext context, String registerNo) async {
+  static Future<void> updateStatus(
+      BuildContext context, String documentId) async {
     final userCollection = FirebaseFirestore.instance.collection('users');
     try {
-      final userQuery = await userCollection.where('register_no', isEqualTo: registerNo).get();
-      Map<String, dynamic>? studentDetail = userQuery.docs.isNotEmpty ? userQuery.docs.first.data() : null;
+      final userQuery = await userCollection.doc(documentId).get();
+      Map<String, dynamic>? studentDetail = userQuery.data();
       if (studentDetail != null) {
-        String userId = userQuery.docs.first.id;
-
         if (studentDetail['depart_status'] == 0) {
-          await FirebaseFirestore.instance.collection('users').doc(userId).update({
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(documentId)
+              .update({
             'depart_status': 1,
             'depart_date': _formatDate(DateTime.now()),
             'depart_time': _formatTime(TimeOfDay.now()),
             'outpass_status': 'active',
           }).whenComplete(() async {
-            await Dashboard.updateDashboard(context, registerNo);
-            Navigator.popUntil(context, (route) => route.settings.name == '/options');
+            await Dashboard.updateDashboard(context, documentId);
+            Navigator.popUntil(
+                context, (route) => route.settings.name == '/options');
           });
         } else if (studentDetail['depart_status'] == 1) {
-          await FirebaseFirestore.instance.collection('users').doc(userId).update({
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(documentId)
+              .update({
             'arrival_status': 1,
             'arrival_date': _formatDate(DateTime.now()),
             'arrival_time': _formatTime(TimeOfDay.now()),
             'outpass_status': 'expired',
           }).whenComplete(() async {
-            await Dashboard.updateDashboard(context, registerNo);
+            await Dashboard.updateDashboard(context, documentId);
           });
-          await FirebaseFirestore.instance.collection('users').doc(userId).update({
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(documentId)
+              .update({
             'submit_date': FieldValue.delete(),
             'purpose': FieldValue.delete(),
             'out_date': FieldValue.delete(),
@@ -107,24 +117,17 @@ class Validation {
             'arrival_date': FieldValue.delete(),
             'arrival_time': FieldValue.delete(),
           }).whenComplete(() {
-            Navigator.popUntil(context, (route) => route.settings.name == '/options');
+            Navigator.popUntil(
+                context, (route) => route.settings.name == '/options');
           });
         }
       } else {
-        // Handle the case where the user with the specified registerNo is not found.
-        print('User not found with register_no: $registerNo');
         showErrorDialog(
-          context,
-          "User not found with the specified register number."
-        );
+            context, "User not found with the specified register number.");
       }
     } catch (e) {
       print('Error updating status: $e');
-      showErrorDialog(
-        context,
-        "An error occurred while updating status."
-      );
+      showErrorDialog(context, "An error occurred while updating status.");
     }
   }
-
 }

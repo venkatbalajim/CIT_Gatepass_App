@@ -19,6 +19,7 @@ dependencies:
   connectivity_plus: ^5.0.2
   firebase_messaging: ^14.7.10
   qr_flutter: ^4.1.0
+  flutter_native_splash: ^2.3.10
 
 dev_dependencies:
   flutter_test:
@@ -27,15 +28,21 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
 
 flutter_launcher_icons:
-  android: "launcher_icon"
+  android: true
   ios: true
   image_path: "images/app_icon.png"
-  adaptive_icon_foreground: "images/app_icon_foreground.png"
   adaptive_icon_background: "#ffffff"
+
+flutter_native_splash:
+  android: true
+  ios: true
+  image: "images/splash_icon.png"
+  image_dark: "images/splash_icon.png"
+  color: "#ffffff"
+  color_dark: "#2b2b2b"
 
 flutter:
   uses-material-design: true
   assets:
-    - images/college_logo.png
+    - images/splash_icon.png
     - images/google_logo.png
-

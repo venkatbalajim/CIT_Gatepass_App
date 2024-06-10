@@ -8,59 +8,36 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  bool _backButtonPressedOnce = false;
-  DateTime? _lastBackPressed;
-
   @override
   Widget build(BuildContext context) {
     // ignore: deprecated_member_use
-    return WillPopScope(
-      child: SafeArea(
-        child: Scaffold(
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(50),
-                  child: Text(
-                    "Welcome to Hostel Outpass App!",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.blue[900],
-                      fontSize: 30,
-                      fontWeight: FontWeight.w500,
-                    ),
+    return SafeArea(
+      child: Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(50),
+                child: Text(
+                  "Welcome to CIT Hostel Outpass App!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.blue[900],
+                    fontSize: 30,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 200,),
-                const GoogleSignInButton(),
-              ],
-            ),
+              ),
+              const SizedBox(
+                height: 200,
+              ),
+              const GoogleSignInButton(),
+            ],
           ),
         ),
       ),
-      onWillPop: () async {
-        if (_backButtonPressedOnce) {
-          return true;
-        } else {
-          CustomSnackBar.showExitSnackBar(context);
-          _backButtonPressedOnce = true;
-
-          if (_lastBackPressed == null ||
-              DateTime.now().difference(_lastBackPressed!) > const Duration(seconds: 2)) {
-            _lastBackPressed = DateTime.now();
-            await Future.delayed(const Duration(seconds: 2));
-          } else {
-            SystemNavigator.pop();
-            return true;
-          }
-
-          _backButtonPressedOnce = false;
-          return false;
-        }
-      },
     );
   }
 }

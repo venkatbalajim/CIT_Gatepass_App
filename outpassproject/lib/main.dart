@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'package:outpassapp/pages/loading_page.dart';
+
 import 'utils/imports.dart';
 
 void main() async {
@@ -25,14 +27,21 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const WelcomePage(),
+      home: const LoadingPage(),
       title: "Hostel Outpass App",
       initialRoute: '/',
       routes: Routes.getRoutes(),
       theme: ThemeData(
-        textTheme: GoogleFonts.poppinsTextTheme(),
-        useMaterial3: true,
-      ),
+          textButtonTheme: const TextButtonThemeData(
+              style: ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+          )),
+          textSelectionTheme: TextSelectionThemeData(
+              cursorColor: Colors.blue[900],
+              selectionColor: Colors.blue[200],
+              selectionHandleColor: Colors.blue[900]),
+          textTheme: GoogleFonts.poppinsTextTheme(),
+          useMaterial3: true),
     );
   }
 }

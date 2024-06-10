@@ -3,7 +3,6 @@
 import '../utils/imports.dart';
 
 class Dashboard {
-
   static void showErrorDialog(BuildContext context, String message) {
     showDialog(
       context: context,
@@ -27,7 +26,8 @@ class Dashboard {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.popUntil(context, (route) => route.settings.name == '/scanner');
+                    Navigator.popUntil(
+                        context, (route) => route.settings.name == '/scanner');
                   },
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all(
@@ -45,40 +45,26 @@ class Dashboard {
       },
     );
   }
-  
-  static Future<void> updateDashboard(BuildContext context, String registerNo) async {
+
+  static Future<void> updateDashboard(
+      BuildContext context, String documentId) async {
     final userCollection = FirebaseFirestore.instance.collection('users');
     try {
-      final userQuery = await userCollection.where('register_no', isEqualTo: registerNo).get();
-      Map<String, dynamic>? studentDetail = userQuery.docs.isNotEmpty ? userQuery.docs.first.data() : null;
-      
+      final userQuery = await userCollection.doc(documentId).get();
+      Map<String, dynamic>? studentDetail = userQuery.data();
+
       if (studentDetail != null) {
-        final dashboardCollection = FirebaseFirestore.instance.collection('dashboard');
-        
-        QuerySnapshot<Map<String, dynamic>> dashboardQuery = await dashboardCollection
-          .where('register_no', isEqualTo: registerNo)
-          .where('outpass_status', isEqualTo: 'active')
-          .get();
-        
-        if (dashboardQuery.docs.isNotEmpty) {
-          await dashboardCollection.doc(dashboardQuery.docs.first.id).set(studentDetail, SetOptions(merge: true));
-        } else {
-          await dashboardCollection.add(studentDetail);
-        }
+        final dashboardCollection =
+            FirebaseFirestore.instance.collection('dashboard');
+        await dashboardCollection
+            .doc(documentId)
+            .set(studentDetail, SetOptions(merge: true));
       } else {
-        print('User not found with register_no: $registerNo');
-        showErrorDialog(
-          context,
-          "User not found with the specified register number."
-        );
+        showErrorDialog(context, "Student not found.");
       }
     } catch (e) {
       print('Error updating dashboard: $e');
-      showErrorDialog(
-        context,
-        "An error occurred while updating dashboard."
-      );
+      showErrorDialog(context, "An error occurred while updating dashboard.");
     }
   }
-
 }

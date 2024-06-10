@@ -15,7 +15,6 @@ class _ScannerPageState extends State<ScannerPage> {
   final TextEditingController passwordController = TextEditingController();
 
   String qrValue = '';
-  String decodedText = '';
 
   @override
   void dispose() {
@@ -105,7 +104,7 @@ class _ScannerPageState extends State<ScannerPage> {
                           final password = await securityUser.fetchPassword();
                           String enteredPassword = passwordController.text;
                           if (password == enteredPassword) {
-                            await Validation.updateStatus(context, decodedText);
+                            await Validation.updateStatus(context, qrValue);
                             Navigator.pop(context);
                             Navigator.pushNamed(context, '/options');
                           } else {
@@ -243,10 +242,7 @@ class _ScannerPageState extends State<ScannerPage> {
         if (scannerResult != "-1") {
           qrValue = scannerResult;
           UserDetails newDetail = UserDetails();
-          decodedText = utf8.decode(base64Decode(qrValue));
-          // ignore: avoid_print
-          print("QR Value is $qrValue and Decoded text is $decodedText");
-          final outpassData = await newDetail.fetchStudentOutpass(decodedText);
+          final outpassData = await newDetail.fetchStudentOutpass(qrValue);
           final isSubmitted = outpassData?['is_submitted'];
           if (isSubmitted == 2) {
             setState(() {
