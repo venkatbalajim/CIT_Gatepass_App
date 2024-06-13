@@ -1,7 +1,6 @@
 import 'imports.dart';
 
 class Routes {
-
   // Student Pages Routes
   static const String options = '/options';
   static const String profile = '/profile';
@@ -9,10 +8,10 @@ class Routes {
   static const String dashboard = '/dashboard';
   static const String principal = '/principal';
   static const String database = '/database';
+  static const String welcome = '/welcome';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
-
       // Student Pages Routes
       options: (context) => const HomePage(),
       profile: (context) => const ProfilePage(),
@@ -20,7 +19,7 @@ class Routes {
       dashboard: (context) => const DashboardPage(),
       principal: (context) => const PrincipalPage(),
       database: (context) => const DatabasePage(),
-      
+      welcome: (context) => const WelcomePage()
     };
   }
 }

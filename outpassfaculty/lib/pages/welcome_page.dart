@@ -28,13 +28,15 @@ class _WelcomePageState extends State<WelcomePage> {
                     "Welcome to Hostel Outpass App!",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.blue[900],
+                      color: Theme.of(context).colorScheme.primary,
                       fontSize: 30,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
-                const SizedBox(height: 200,),
+                const SizedBox(
+                  height: 200,
+                ),
                 const GoogleSignInButton(),
               ],
             ),
@@ -49,7 +51,8 @@ class _WelcomePageState extends State<WelcomePage> {
           _backButtonPressedOnce = true;
 
           if (_lastBackPressed == null ||
-              DateTime.now().difference(_lastBackPressed!) > const Duration(seconds: 2)) {
+              DateTime.now().difference(_lastBackPressed!) >
+                  const Duration(seconds: 2)) {
             _lastBackPressed = DateTime.now();
             await Future.delayed(const Duration(seconds: 2));
           } else {

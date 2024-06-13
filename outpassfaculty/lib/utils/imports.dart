@@ -15,6 +15,10 @@ import 'package:outpassfaculty/pages/principal_page.dart';
 export 'package:outpassfaculty/pages/principal_page.dart';
 import 'package:outpassfaculty/pages/database_page.dart';
 export 'package:outpassfaculty/pages/database_page.dart';
+import 'package:outpassfaculty/pages/loading_page.dart';
+export 'package:outpassfaculty/pages/loading_page.dart';
+import 'package:outpassfaculty/pages/settings_page.dart';
+export 'package:outpassfaculty/pages/settings_page.dart';
 
 // Services
 import 'package:outpassfaculty/services/authentication.dart';
@@ -35,6 +39,8 @@ import 'package:outpassfaculty/utils/user_details.dart';
 export 'package:outpassfaculty/utils/user_details.dart';
 import 'package:outpassfaculty/utils/excel_download.dart';
 export 'package:outpassfaculty/utils/excel_download.dart';
+import 'package:outpassfaculty/utils/themes.dart';
+export 'package:outpassfaculty/utils/themes.dart';
 
 // Custom Widgets
 import 'package:outpassfaculty/widgets/common_widgets/info_card.dart';
@@ -110,7 +116,8 @@ export 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 export 'package:permission_handler/permission_handler.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
-export 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Stack, Row, Column, Border;
+export 'package:syncfusion_flutter_xlsio/xlsio.dart'
+    hide Stack, Row, Column, Border;
 import 'package:path_provider/path_provider.dart';
 export 'package:path_provider/path_provider.dart';
 import 'package:csv/csv.dart';
