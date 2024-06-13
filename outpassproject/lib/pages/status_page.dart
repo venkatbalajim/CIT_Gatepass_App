@@ -27,7 +27,9 @@ class _StatusPageState extends State<StatusPage> {
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => const HomePage()));
               },
-              child: Text('OK', style: TextStyle(color: Colors.blue[900])),
+              child: Text('OK',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary)),
             )
           ],
         );
@@ -42,7 +44,7 @@ class _StatusPageState extends State<StatusPage> {
       case "Declined":
         return Colors.red;
       default:
-        return Colors.blue[900];
+        return Theme.of(context).colorScheme.primary;
     }
   }
 
@@ -61,13 +63,17 @@ class _StatusPageState extends State<StatusPage> {
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
-              child: Text('Yes', style: TextStyle(color: Colors.blue[900])),
+              child: Text('Yes',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary)),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: Text('No', style: TextStyle(color: Colors.blue[900])),
+              child: Text('No',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary)),
             ),
           ],
         );
@@ -132,164 +138,148 @@ class _StatusPageState extends State<StatusPage> {
               userData['hod_status'],
               userData['warden_status']);
           return SafeArea(
-            child: RefreshIndicator(
-                backgroundColor: Colors.blue[900],
-                color: Colors.white,
-                onRefresh: () async {
-                  await userDetails.getUserDetails(currentUserEmail);
-                  await Future.delayed(const Duration(seconds: 1));
-                  setState(() {});
-                },
-                // ignore: deprecated_member_use
-                child: WillPopScope(
-                  onWillPop: () async {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomePage()));
-                    return true;
-                  },
-                  child: Scaffold(
-                    body:
-                        ListView(padding: const EdgeInsets.all(30), children: [
-                      Center(
+              child: RefreshIndicator(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            color: Colors.white,
+            onRefresh: () async {
+              await userDetails.getUserDetails(currentUserEmail);
+              await Future.delayed(const Duration(seconds: 1));
+              setState(() {});
+            },
+            // ignore: deprecated_member_use
+            child: Scaffold(
+              body: ListView(padding: const EdgeInsets.all(30), children: [
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Outpass Status",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(30, 20, 30, 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            color: const Color.fromRGBO(13, 71, 161, 1),
+                            width: 2,
+                          ),
+                        ),
+                        alignment: Alignment.center,
+                        width: 300,
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Outpass Status",
+                              "Status: $outpassStatus",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: 25,
-                                color: Colors.blue[900],
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            Container(
-                              padding:
-                                  const EdgeInsets.fromLTRB(30, 20, 30, 10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                border: Border.all(
-                                  color: const Color.fromRGBO(13, 71, 161, 1),
-                                  width: 2,
-                                ),
-                              ),
-                              alignment: Alignment.center,
-                              width: 300,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Status: $outpassStatus",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: getStatusColor(outpassStatus!),
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 30,
-                                  ),
-                                  InfoCard(
-                                      label: 'Class Advisor',
-                                      detail: statusCheck.currentStatus(
-                                          userData['advisor_status'])),
-                                  InfoCard(
-                                      label: 'HoD',
-                                      detail: statusCheck.currentStatus(
-                                          userData['hod_status'])),
-                                  InfoCard(
-                                      label: 'Hostel Warden',
-                                      detail: statusCheck.currentStatus(
-                                          userData['warden_status'])),
-                                ],
+                                color: getStatusColor(outpassStatus!),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                             const SizedBox(
-                              height: 20,
+                              height: 30,
                             ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.fromLTRB(30, 20, 30, 10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                border: Border.all(
-                                  color: const Color.fromRGBO(13, 71, 161, 1),
-                                  width: 2,
-                                ),
-                              ),
-                              alignment: Alignment.center,
-                              width: 300,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Outpass Preview",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.blue[900],
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(
-                                    height: 30,
-                                  ),
-                                  InfoCard(
-                                      label: 'Submit date',
-                                      detail: userData['submit_date']),
-                                  InfoCard(
-                                      label: 'Purpose',
-                                      detail: userData['purpose']),
-                                  InfoCard(
-                                      label: 'Out date',
-                                      detail: userData['out_date']),
-                                  InfoCard(
-                                      label: 'Out time',
-                                      detail: userData['out_time']),
-                                  InfoCard(
-                                      label: 'In date',
-                                      detail: userData['in_date']),
-                                  InfoCard(
-                                      label: 'In time',
-                                      detail: userData['in_time']),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            const InstructionCard(
-                                instruction:
-                                    "If your outpass status is DECLINED, click CANCEL OUTPASS to submit new outpass."),
-                            const SizedBox(height: 10),
-                            if (result == 1)
-                              GetQRButton(
-                                  name: buttonName!,
-                                  onTap: () {
-                                    statusCheck.nextPage(
-                                        context, result!, docId);
-                                  }),
-                            const SizedBox(height: 10),
-                            CancelButton(
-                                name: 'Cancel Outpass',
-                                onTap: () async {
-                                  bool? confirm = await showConfirmationDialog(
-                                      context,
-                                      "Are you sure to cancel your outpass? This cannot be undone.");
-                                  if (confirm != null && confirm) {
-                                    QRValidation validation = QRValidation();
-                                    // ignore: use_build_context_synchronously
-                                    validation.eraseAll(context);
-                                  }
-                                }),
-                            const SizedBox(height: 40),
+                            InfoCard(
+                                label: 'Class Advisor',
+                                detail: statusCheck
+                                    .currentStatus(userData['advisor_status'])),
+                            InfoCard(
+                                label: 'HoD',
+                                detail: statusCheck
+                                    .currentStatus(userData['hod_status'])),
+                            InfoCard(
+                                label: 'Hostel Warden',
+                                detail: statusCheck
+                                    .currentStatus(userData['warden_status'])),
                           ],
                         ),
                       ),
-                    ]),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(30, 20, 30, 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            color: const Color.fromRGBO(13, 71, 161, 1),
+                            width: 2,
+                          ),
+                        ),
+                        alignment: Alignment.center,
+                        width: 300,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Outpass Preview",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            InfoCard(
+                                label: 'Submit date',
+                                detail: userData['submit_date']),
+                            InfoCard(
+                                label: 'Purpose', detail: userData['purpose']),
+                            InfoCard(
+                                label: 'Out date',
+                                detail: userData['out_date']),
+                            InfoCard(
+                                label: 'Out time',
+                                detail: userData['out_time']),
+                            InfoCard(
+                                label: 'In date', detail: userData['in_date']),
+                            InfoCard(
+                                label: 'In time', detail: userData['in_time']),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      const InstructionCard(
+                          instruction:
+                              "If your outpass status is DECLINED, click CANCEL OUTPASS to submit new outpass."),
+                      const SizedBox(height: 10),
+                      if (result == 1)
+                        GetQRButton(
+                            name: buttonName!,
+                            onTap: () {
+                              statusCheck.nextPage(context, result!, docId);
+                            }),
+                      const SizedBox(height: 10),
+                      CancelButton(
+                          name: 'Cancel Outpass',
+                          onTap: () async {
+                            bool? confirm = await showConfirmationDialog(
+                                context,
+                                "Are you sure to cancel your outpass? This cannot be undone.");
+                            if (confirm != null && confirm) {
+                              QRValidation validation = QRValidation();
+                              // ignore: use_build_context_synchronously
+                              validation.eraseAll(context);
+                            }
+                          }),
+                      const SizedBox(height: 40),
+                    ],
                   ),
-                )),
-          );
+                ),
+              ]),
+            ),
+          ));
         }
       },
     );

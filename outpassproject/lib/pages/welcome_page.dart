@@ -10,7 +10,6 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
-    // ignore: deprecated_member_use
     return SafeArea(
       child: Scaffold(
         body: Center(
@@ -24,7 +23,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   "Welcome to CIT Hostel Outpass App!",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.blue[900],
+                    color: Theme.of(context).colorScheme.primary,
                     fontSize: 30,
                     fontWeight: FontWeight.w500,
                   ),

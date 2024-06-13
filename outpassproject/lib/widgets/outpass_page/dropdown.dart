@@ -24,24 +24,27 @@ class _CustomDropdownState extends State<CustomDropdown> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Purpose', style: TextStyle(color: Colors.blue[900], fontSize: 17),),
+              Text(
+                'Purpose',
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary, fontSize: 17),
+              ),
               const SizedBox(height: 10),
               Container(
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: const Color.fromRGBO(13, 71, 161, 1),
-                    width: 2,
-                  )
-                ),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: const Color.fromRGBO(13, 71, 161, 1),
+                      width: 2,
+                    )),
                 child: DropdownButton<String>(
                   value: selectedOption,
                   onChanged: (String? newValue) {
                     setState(() {
                       selectedOption = newValue!;
                       showTextField = (newValue == 'Others');
-                      widget.onChanged(newValue); 
+                      widget.onChanged(newValue);
                     });
                   },
                   items: <String>[
@@ -51,8 +54,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                     'Workshop',
                     'Hospital',
                     'Others',
-                  ]
-                  .map<DropdownMenuItem<String>>((String value) {
+                  ].map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -67,23 +69,21 @@ class _CustomDropdownState extends State<CustomDropdown> {
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: TextField(
-                cursorColor: Colors.blue[900],
+                cursorColor: Theme.of(context).colorScheme.primary,
                 controller: customPurposeController,
                 onChanged: widget.onChanged,
                 inputFormatters: [LengthLimitingTextInputFormatter(15)],
                 decoration: const InputDecoration(
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color.fromRGBO(13, 71, 161, 1),
-                      width: 2,
-                    )
-                  ),
+                      borderSide: BorderSide(
+                    color: Color.fromRGBO(13, 71, 161, 1),
+                    width: 2,
+                  )),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color.fromRGBO(13, 71, 161, 1),
-                      width: 2,
-                    )
-                  ),
+                      borderSide: BorderSide(
+                    color: Color.fromRGBO(13, 71, 161, 1),
+                    width: 2,
+                  )),
                   hintText: 'Enter the purpose',
                 ),
               ),

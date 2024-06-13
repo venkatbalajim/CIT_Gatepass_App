@@ -26,22 +26,11 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const LoadingPage(),
-      title: "Hostel Outpass App",
-      initialRoute: '/',
-      routes: Routes.getRoutes(),
-      theme: ThemeData(
-          textButtonTheme: const TextButtonThemeData(
-              style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-          )),
-          textSelectionTheme: TextSelectionThemeData(
-              cursorColor: Colors.blue[900],
-              selectionColor: Colors.blue[200],
-              selectionHandleColor: Colors.blue[900]),
-          textTheme: GoogleFonts.poppinsTextTheme(),
-          useMaterial3: true),
-    );
+        debugShowCheckedModeBanner: false,
+        home: const LoadingPage(),
+        title: "Hostel Outpass App",
+        initialRoute: '/',
+        routes: Routes.getRoutes(),
+        theme: lightTheme);
   }
 }

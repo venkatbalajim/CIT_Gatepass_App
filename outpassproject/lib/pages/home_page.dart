@@ -53,46 +53,45 @@ class _HomePageState extends State<HomePage> {
       },
       child: SafeArea(
         child: Scaffold(
-          body: Center(
-            child: PageView(
-              controller: controller,
-              onPageChanged: (value) {
-                setState(() {
-                  _selectedIndex = value;
-                });
-              },
-              children: [
-                const ProfilePage(),
-                FutureBuilder<Widget>(
-                  future: _getOutpassPage(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                          child: CircularProgressIndicator(
-                              color: Colors.blue[900]));
-                    } else if (snapshot.hasError) {
-                      return Center(
-                          child: SizedBox(
-                        width: 200,
-                        height: 200,
-                        child: Text(
-                          textAlign: TextAlign.center,
-                          'Sorry, unable to load the page.',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey[900]),
-                        ),
-                      ));
-                    } else {
-                      return snapshot.data ??
-                          const Center(
-                              child: Text('Sorry, unable to load the page.'));
-                    }
+          body: FutureBuilder<Widget>(
+            future: _getOutpassPage(),
+            builder: (context, snapshot) {
+              return Center(
+                child: PageView(
+                  controller: controller,
+                  onPageChanged: (value) {
+                    setState(() {
+                      _selectedIndex = value;
+                    });
                   },
+                  children: [
+                    const ProfilePage(),
+                    snapshot.connectionState == ConnectionState.waiting
+                        ? Center(
+                            child: CircularProgressIndicator(
+                                color: Theme.of(context).colorScheme.primary))
+                        : snapshot.hasError
+                            ? Center(
+                                child: SizedBox(
+                                width: 200,
+                                height: 200,
+                                child: Text(
+                                  textAlign: TextAlign.center,
+                                  'Sorry, unable to load the page.',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey[900]),
+                                ),
+                              ))
+                            : snapshot.data ??
+                                const Center(
+                                    child: Text(
+                                        'Sorry, unable to load the page.')),
+                    const SettingsPage()
+                  ],
                 ),
-                const SettingsPage()
-              ],
-            ),
+              );
+            },
           ),
           bottomNavigationBar: Theme(
             data: ThemeData(
@@ -103,9 +102,9 @@ class _HomePageState extends State<HomePage> {
             child: BottomNavigationBar(
               iconSize: 24,
               currentIndex: _selectedIndex,
+              backgroundColor: Theme.of(context).colorScheme.background,
               selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-              selectedItemColor: Colors.blue[900],
-              unselectedItemColor: Colors.blue[900],
+              selectedItemColor: Theme.of(context).colorScheme.primary,
               onTap: _onItemTapped,
               type: BottomNavigationBarType.fixed,
               items: const [

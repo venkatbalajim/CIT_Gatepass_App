@@ -74,7 +74,8 @@ class FirebaseService {
                     },
                     child: Text(
                       'OK',
-                      style: TextStyle(color: Colors.blue[900]),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary),
                     )))
           ],
         );

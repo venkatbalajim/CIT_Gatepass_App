@@ -39,6 +39,8 @@ import 'package:outpassapp/utils/status_validation.dart';
 export 'package:outpassapp/utils/status_validation.dart';
 import 'package:outpassapp/utils/user_details.dart';
 export 'package:outpassapp/utils/user_details.dart';
+import 'package:outpassapp/utils/themes.dart';
+export 'package:outpassapp/utils/themes.dart';
 
 // Custom Widgets
 import 'package:outpassapp/widgets/common_widgets/info_card.dart';

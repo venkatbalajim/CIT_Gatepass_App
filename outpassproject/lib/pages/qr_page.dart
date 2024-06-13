@@ -34,7 +34,7 @@ class _QRPageState extends State<QRPage> {
         return AlertDialog(
           backgroundColor: Colors.white,
           surfaceTintColor: Colors.transparent,
-          title: const Text('Submission Denied'),
+          title: const Text('Permission Denied'),
           content: Text(
             message,
             style: const TextStyle(
@@ -46,7 +46,9 @@ class _QRPageState extends State<QRPage> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('OK', style: TextStyle(color: Colors.blue[900])),
+              child: Text('OK',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary)),
             )
           ],
         );
@@ -69,13 +71,17 @@ class _QRPageState extends State<QRPage> {
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
-              child: Text('Yes', style: TextStyle(color: Colors.blue[900])),
+              child: Text('Yes',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary)),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: Text('No', style: TextStyle(color: Colors.blue[900])),
+              child: Text('No',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary)),
             ),
           ],
         );
@@ -95,72 +101,64 @@ class _QRPageState extends State<QRPage> {
     }
 
     // ignore: deprecated_member_use
-    return WillPopScope(
-      child: SafeArea(
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: Scaffold(
-            body: SingleChildScrollView(
-              child: Container(
-                padding: const EdgeInsets.all(30),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 50,
+    return SafeArea(
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+          body: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.all(30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Text(
+                    "Outpass QR Code",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 25,
                     ),
-                    Text(
-                      "Outpass QR Code",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.blue[900],
-                        fontSize: 25,
-                      ),
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: QrImageView(
+                      data: qrData,
+                      gapless: false,
+                      size: 200,
+                      version: QrVersions.auto,
                     ),
-                    const SizedBox(
-                      height: 50,
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: QrImageView(
-                        data: qrData,
-                        gapless: false,
-                        size: 200,
-                        version: QrVersions.auto,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    CancelButton(
-                        name: 'Cancel Outpass',
-                        onTap: () async {
-                          int depart = await departStatus();
-                          if (depart == 0) {
-                            bool? confirm = await showConfirmationDialog(
-                                context,
-                                "Are you sure to cancel your outpass? This cannot be undone.");
-                            if (confirm != null && confirm) {
-                              QRValidation validation = QRValidation();
-                              validation.eraseAll(context);
-                            }
-                          } else {
-                            showErrorDialog(context,
-                                "Sorry, you already used this Outpass QR Code. So you cannot cancel your Outpass.");
+                  ),
+                  const SizedBox(height: 20),
+                  CancelButton(
+                      name: 'Cancel Outpass',
+                      onTap: () async {
+                        int depart = await departStatus();
+                        if (depart == 0) {
+                          bool? confirm = await showConfirmationDialog(context,
+                              "Are you sure to cancel your outpass? This cannot be undone.");
+                          if (confirm != null && confirm) {
+                            QRValidation validation = QRValidation();
+                            validation.eraseAll(context);
                           }
-                        }),
-                  ],
-                ),
+                        } else {
+                          showErrorDialog(context,
+                              "Sorry, you already used this Outpass QR Code. So you cannot cancel your Outpass.");
+                        }
+                      }),
+                ],
               ),
             ),
           ),
         ),
       ),
-      onWillPop: () async {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const HomePage()));
-        return true;
-      },
     );
   }
 }

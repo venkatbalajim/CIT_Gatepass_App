@@ -4,7 +4,8 @@ class CustomDatePicker extends StatefulWidget {
   final String label;
   final void Function(String, DateTime) onDateChanged;
 
-  const CustomDatePicker({super.key, required this.label, required this.onDateChanged});
+  const CustomDatePicker(
+      {super.key, required this.label, required this.onDateChanged});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -45,50 +46,44 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                   lastDate: DateTime.now().add(const Duration(days: 365)),
                   builder: (BuildContext context, Widget? child) {
                     return Theme(
-                      data: ThemeData(
-                        colorScheme: const ColorScheme.light(
+                        data: ThemeData(
+                            colorScheme: const ColorScheme.light(
                           primary: Color.fromRGBO(13, 71, 161, 1),
-                        )
-                      ), 
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 50.0),
-                            child: SizedBox(
-                              height: 550,
-                              width: 700,
-                              child: child,
+                        )),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(top: 50.0),
+                              child: SizedBox(
+                                height: 550,
+                                width: 700,
+                                child: child,
+                              ),
                             ),
-                          ),
-                        ],
-                      )
-                    );
+                          ],
+                        ));
                   },
                 ).then((value) {
                   if (value != null && value != selectedDate) {
                     setState(() {
                       selectedDate = value;
                       formattedSelectedDate = _formatDate(value);
-                      widget.onDateChanged(formattedSelectedDate, selectedDate); 
+                      widget.onDateChanged(formattedSelectedDate, selectedDate);
                     });
                   }
                 });
               },
               style: ButtonStyle(
-                side: MaterialStateProperty.all(
-                  const BorderSide(color: Color.fromRGBO(13, 71, 161, 1), width: 2)
-                ),
+                side: MaterialStateProperty.all(const BorderSide(
+                    color: Color.fromRGBO(13, 71, 161, 1), width: 2)),
                 backgroundColor: MaterialStateProperty.all(
                   Colors.white,
                 ),
                 foregroundColor: MaterialStateProperty.all(
-                  Colors.blue[900]
-                ),
-                fixedSize: MaterialStateProperty.all(
-                  const Size(120,40)
-                ),
+                    Theme.of(context).colorScheme.primary),
+                fixedSize: MaterialStateProperty.all(const Size(120, 40)),
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),

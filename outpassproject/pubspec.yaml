@@ -37,9 +37,7 @@ flutter_native_splash:
   android: true
   ios: true
   image: "images/splash_icon.png"
-  image_dark: "images/splash_icon.png"
   color: "#ffffff"
-  color_dark: "#2b2b2b"
 
 flutter:
   uses-material-design: true

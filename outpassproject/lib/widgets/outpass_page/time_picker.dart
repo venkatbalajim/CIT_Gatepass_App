@@ -4,7 +4,8 @@ class CustomTimePicker extends StatefulWidget {
   final String label;
   final void Function(String, TimeOfDay) onTimeChanged;
 
-  const CustomTimePicker({super.key, required this.label, required this.onTimeChanged});
+  const CustomTimePicker(
+      {super.key, required this.label, required this.onTimeChanged});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -17,7 +18,8 @@ class _CustomTimePickerState extends State<CustomTimePicker> {
 
   String _formatTime(TimeOfDay time) {
     final now = DateTime.now();
-    final dateTime = DateTime(now.year, now.month, now.day, time.hour, time.minute);
+    final dateTime =
+        DateTime(now.year, now.month, now.day, time.hour, time.minute);
     final formattedTime = DateFormat.jm().format(dateTime);
     return formattedTime;
   }
@@ -46,52 +48,46 @@ class _CustomTimePickerState extends State<CustomTimePicker> {
                   initialTime: selectedTime,
                   builder: (BuildContext context, Widget? child) {
                     return Theme(
-                      data: ThemeData(
-                        colorScheme: const ColorScheme.light(
+                        data: ThemeData(
+                            colorScheme: const ColorScheme.light(
                           primary: Color.fromRGBO(13, 71, 161, 1),
                           secondary: Color.fromRGBO(13, 71, 161, 1),
                           onSecondary: Colors.white,
-                        )
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 50.0),
-                            child: SizedBox(
-                              height: 550,
-                              width: 700,
-                              child: child,
+                        )),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(top: 50.0),
+                              child: SizedBox(
+                                height: 550,
+                                width: 700,
+                                child: child,
+                              ),
                             ),
-                          ),
-                        ],
-                      )
-                    );
+                          ],
+                        ));
                   },
                 ).then((value) {
                   if (value != null && value != selectedTime) {
                     setState(() {
                       selectedTime = value;
                       formattedSelectedTime = _formatTime(value);
-                      widget.onTimeChanged(formattedSelectedTime, selectedTime); 
+                      widget.onTimeChanged(formattedSelectedTime, selectedTime);
                     });
                   }
                 });
               },
               style: ButtonStyle(
-                side: MaterialStateProperty.all(
-                  const BorderSide(color: Color.fromRGBO(13, 71, 161, 1), width: 2)
-                ),
+                side: MaterialStateProperty.all(const BorderSide(
+                    color: Color.fromRGBO(13, 71, 161, 1), width: 2)),
                 backgroundColor: MaterialStateProperty.all(
                   Colors.white,
                 ),
                 foregroundColor: MaterialStateProperty.all(
-                  Colors.blue[900]
-                ),
-                fixedSize: MaterialStateProperty.all(
-                  const Size(120,40)
-                ),
+                    Theme.of(context).colorScheme.primary),
+                fixedSize: MaterialStateProperty.all(const Size(120, 40)),
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),

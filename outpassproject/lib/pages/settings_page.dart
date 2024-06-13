@@ -50,21 +50,10 @@ class _SettingsPageState extends State<SettingsPage> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 25,
-            color: Colors.blue[900],
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
         const SizedBox(height: 40),
-        TextButton(
-            style: ButtonStyle(
-              alignment: Alignment.center,
-              foregroundColor: MaterialStateProperty.all(Colors.white),
-              backgroundColor: MaterialStateProperty.all(Colors.blue[900]),
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5))),
-            ),
-            onPressed: () {},
-            child: const Text('Change Theme', style: TextStyle(fontSize: 15))),
-        const SizedBox(height: 10),
         TextButton(
             style: ButtonStyle(
                 alignment: Alignment.center,

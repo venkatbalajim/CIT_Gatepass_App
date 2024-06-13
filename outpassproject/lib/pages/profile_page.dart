@@ -24,7 +24,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => const HomePage()));
               },
-              child: Text('OK', style: TextStyle(color: Colors.blue[900])),
+              child: Text('OK',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary)),
             )
           ],
         );
@@ -90,7 +92,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 25,
-                    color: Colors.blue[900],
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 const SizedBox(height: 15),
@@ -156,6 +158,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15)),
                         const SizedBox(height: 10),
+                        InfoCard(
+                            label: "College", detail: userData?['college']),
                         InfoCard(
                             label: "Department",
                             detail: userData?['department']),

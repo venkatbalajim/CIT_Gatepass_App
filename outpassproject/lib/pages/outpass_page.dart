@@ -11,7 +11,7 @@ class _OutpassPageState extends State<OutpassPage> {
   String allDetailErr = 'Kindly fill all the details.';
   String timeIntervalErr =
       'Invalid time interval. It should be at least 5 minutes.';
-  String dateTimeErr = 'In date time must be after out date time.';
+  String dateTimeErr = 'Kindly check out date time and in date time.';
 
   static String _formatTime(TimeOfDay time) {
     final now = DateTime.now();
@@ -56,7 +56,9 @@ class _OutpassPageState extends State<OutpassPage> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('OK', style: TextStyle(color: Colors.blue[900])),
+              child: Text('OK',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary)),
             )
           ],
         );
@@ -106,8 +108,9 @@ Are you sure to proceed?
                       MaterialPageRoute(
                           builder: (context) => const HomePage()));
                 },
-                child:
-                    Text('Proceed', style: TextStyle(color: Colors.blue[900])))
+                child: Text('Proceed',
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary)))
           ],
         );
       },
