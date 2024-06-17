@@ -45,7 +45,8 @@ class _WelcomePageState extends State<WelcomePage> {
       ),
       onWillPop: () async {
         if (_backButtonPressedOnce) {
-          return true;
+          SystemNavigator.pop();
+          return false;
         } else {
           CustomSnackBar.showExitSnackBar(context, "Press again to exit app");
           _backButtonPressedOnce = true;

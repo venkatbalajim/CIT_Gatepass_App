@@ -2,7 +2,7 @@
 
 import '../../utils/imports.dart';
 
-const button_1 = "User Profile";
+const button_1 = "Profile";
 const button_2 = "Outpass";
 const button_3 = "Dashboard";
 const button_4 = "Logout";
@@ -11,28 +11,48 @@ const button_5 = "Database";
 Widget? getButtonIcon(String name) {
   switch (name) {
     case button_1:
-      return const Icon(Icons.person, color: Colors.white, size: 22,);
+      return const Icon(
+        Icons.person,
+        color: Colors.white,
+        size: 35,
+      );
     case button_2:
-      return const Icon(Icons.assignment, color: Colors.white, size: 22,);
+      return const Icon(
+        Icons.assignment,
+        color: Colors.white,
+        size: 35,
+      );
     case button_3:
-      return const Icon(Icons.dashboard, color: Colors.white, size: 22,);
+      return const Icon(
+        Icons.dashboard,
+        color: Colors.white,
+        size: 35,
+      );
     case button_4:
-      return const Icon(Icons.logout, color: Colors.white, size: 22,);
+      return const Icon(
+        Icons.logout,
+        color: Colors.white,
+        size: 35,
+      );
     case button_5:
-      return const Icon(Icons.storage, color: Colors.white, size: 22,);
+      return const Icon(
+        Icons.storage,
+        color: Colors.white,
+        size: 35,
+      );
     default:
       return null;
   }
 }
 
-Color? getButtonColor(String name) {
-  return Colors.blue[900];
+Color? getButtonColor(BuildContext context, String name) {
+  return Theme.of(context).colorScheme.primary;
 }
 
 // ignore: non_constant_identifier_names
 Widget HomeButton(BuildContext context, String name) {
   Widget? buttonIcon = getButtonIcon(name);
-  Color? buttonColor = getButtonColor(name); 
+  Color? buttonColor = getButtonColor(context, name);
   UserDetails userDetails = UserDetails();
   DashboardDetails dashboardDetails = DashboardDetails();
 
@@ -51,18 +71,18 @@ Widget HomeButton(BuildContext context, String name) {
       }
     },
     child: Container(
-      width: 230,
-      height: 45,
+      width: 100,
+      height: 100,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: buttonColor, 
+        color: buttonColor,
       ),
-      child: Row(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (buttonIcon != null) buttonIcon, 
-          const SizedBox(width: 15),
+          if (buttonIcon != null) buttonIcon,
+          const SizedBox(height: 10),
           Text(
             name,
             style: const TextStyle(

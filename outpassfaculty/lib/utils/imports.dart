@@ -17,8 +17,6 @@ import 'package:outpassfaculty/pages/database_page.dart';
 export 'package:outpassfaculty/pages/database_page.dart';
 import 'package:outpassfaculty/pages/loading_page.dart';
 export 'package:outpassfaculty/pages/loading_page.dart';
-import 'package:outpassfaculty/pages/settings_page.dart';
-export 'package:outpassfaculty/pages/settings_page.dart';
 
 // Services
 import 'package:outpassfaculty/services/authentication.dart';
@@ -69,6 +67,8 @@ import 'package:outpassfaculty/widgets/dashboard_page/filter_options.dart';
 export 'package:outpassfaculty/widgets/dashboard_page/filter_options.dart';
 import 'package:outpassfaculty/widgets/principal_page/counter_cards.dart';
 export 'package:outpassfaculty/widgets/principal_page/counter_cards.dart';
+import 'package:outpassfaculty/widgets/submission_page/single_action.dart';
+export 'package:outpassfaculty/widgets/submission_page/single_action.dart';
 
 // Dart Packages
 import 'dart:convert';

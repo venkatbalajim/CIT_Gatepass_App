@@ -3,7 +3,6 @@
 import 'imports.dart';
 
 class ExcelGenerator {
-
   Future<void> requestPermission(BuildContext context) async {
     if (Platform.isAndroid) {
       DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -14,19 +13,23 @@ class ExcelGenerator {
         if (status1 == PermissionStatus.granted) {
           generateCSV(context);
         } else {
-          CustomSnackBar.showExitSnackBar(context, 'Storage permission denied.');
+          CustomSnackBar.showExitSnackBar(
+              context, 'Storage permission denied.');
         }
       } else {
-        PermissionStatus status2 = await Permission.manageExternalStorage.request();
+        PermissionStatus status2 =
+            await Permission.manageExternalStorage.request();
         if (status2 == PermissionStatus.granted) {
           generateCSV(context);
         } else {
-          CustomSnackBar.showExitSnackBar(context, 'Storage permission denied.');
+          CustomSnackBar.showExitSnackBar(
+              context, 'Storage permission denied.');
         }
       }
     } else if (Platform.isIOS) {
       PermissionStatus status = await Permission.storage.request();
-      if (status == PermissionStatus.granted || status == PermissionStatus.limited) {
+      if (status == PermissionStatus.granted ||
+          status == PermissionStatus.limited) {
         generateCSV(context);
       } else {
         CustomSnackBar.showExitSnackBar(context, 'Storage permission denied.');
@@ -106,7 +109,10 @@ class ExcelGenerator {
                   child: SmallButton(
                     name: 'Ok',
                     onTap: () {
-                      Navigator.popUntil(context, (route) => route.settings.name == '/options');
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomePage()));
                     },
                   ),
                 ),
@@ -134,7 +140,7 @@ class ExcelGenerator {
             ),
             SizedBox(height: 30),
             Text(
-              "Saving the Excel file ...",
+              "Saving the Excel (CSV) file ...",
               style: TextStyle(
                 fontSize: 17,
               ),
@@ -152,17 +158,16 @@ class ExcelGenerator {
     // Add header row
     rows.add([
       'Name',
-      'Register No',
+      'Year',
+      'Department',
+      'Section',
+      'College',
       'Depart Date',
       'Depart Time',
       'Arrival Date',
       'Arrival Time',
       'Email',
-      'Year',
-      'Department',
-      'Section',
       'Hostel',
-      'Room No',
       'Student Mobile',
       'Parent Mobile',
     ]);
@@ -172,17 +177,16 @@ class ExcelGenerator {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
       rows.add([
         data['name'] ?? '',
-        data['register_no'] ?? '',
+        data['year'].toString(),
+        data['department'] ?? '',
+        data['section'] ?? '',
+        data['college'] ?? '',
         data['depart_date'] ?? '',
         data['depart_time'] ?? '',
         data['arrival_date'] ?? '',
         data['arrival_time'] ?? '',
         data['email'] ?? '',
-        data['year'].toString(),
-        data['department'] ?? '',
-        data['section'] ?? '',
         data['hostel'] ?? '',
-        data['room_no'] ?? '',
         data['student_mobile'].toString(),
         data['parent_mobile'].toString(),
       ]);
@@ -191,22 +195,23 @@ class ExcelGenerator {
     return const ListToCsvConverter().convert(rows);
   }
 
-
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<void> generateCSV(BuildContext context) async {
     try {
       showLoadingDialog();
       print("Fetching the documents from the online database ...");
-      QuerySnapshot querySnapshot = await firestore.collection('dashboard')
-        .where(FieldPath.documentId, isNotEqualTo: 'sample-document')
-        .where('arrival_status', isEqualTo: 1)
-        .get();
+      QuerySnapshot querySnapshot = await firestore
+          .collection('dashboard')
+          .where(FieldPath.documentId, isNotEqualTo: 'sample-document')
+          .where('arrival_status', isEqualTo: 1)
+          .get();
 
       String csvData = _generateCSVData(querySnapshot.docs);
 
       print("Getting the file path location to save the file ...");
-      String dir = "${(await getExternalStorageDirectory())!.path}/Outpass_Data_${_getCurrentDateAndTime()}.csv";
+      String dir =
+          "${(await getExternalStorageDirectory())!.path}/Outpass_Data_${_getCurrentDateAndTime()}.csv";
 
       print("Saving the file in the mobile device ...");
       final File file = File(dir);
@@ -222,7 +227,8 @@ class ExcelGenerator {
       }
     } catch (e) {
       print(e.toString());
-      showErrorDialog(context, 'Sorry, an error occured while fetching data from database.');
+      showErrorDialog(context,
+          'Sorry, an error occured while fetching data from database.');
     }
   }
 
@@ -231,5 +237,4 @@ class ExcelGenerator {
     final formattedDate = DateFormat('dd-MM-yyyy_HH:mm').format(now);
     return formattedDate;
   }
-
 }

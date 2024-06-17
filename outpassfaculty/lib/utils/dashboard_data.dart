@@ -3,7 +3,6 @@
 import 'imports.dart';
 
 class DashboardDetails {
-
   static void showErrorDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -30,7 +29,11 @@ class DashboardDetails {
                 const SizedBox(height: 20),
                 SizedBox(
                   width: 60,
-                  child: SmallButton(name: 'Ok', onTap: () {Navigator.pop(context);}),
+                  child: SmallButton(
+                      name: 'Ok',
+                      onTap: () {
+                        Navigator.pop(context);
+                      }),
                 )
               ],
             ),
@@ -40,7 +43,7 @@ class DashboardDetails {
     );
   }
 
-  // Method to fetch all the documents in 'dashboard' collection. 
+  // Method to fetch all the documents in 'dashboard' collection.
   Future<void> fetchAllInfo(BuildContext context) async {
     try {
       FirebaseAuth auth = FirebaseAuth.instance;
@@ -56,12 +59,14 @@ class DashboardDetails {
         print('Error fetching data');
       }
       FirebaseFirestore firestore = FirebaseFirestore.instance;
-      QuerySnapshot querySnapshot = await firestore.collection('dashboard')
-        .orderBy('depart_date')
-        .orderBy('depart_time')
-        .orderBy('name')
-        .get();
-      List<DocumentSnapshot<Map<String, dynamic>>> documents = querySnapshot.docs.cast<DocumentSnapshot<Map<String, dynamic>>>();
+      QuerySnapshot querySnapshot = await firestore
+          .collection('dashboard')
+          .orderBy('depart_date')
+          .orderBy('depart_time')
+          .orderBy('name')
+          .get();
+      List<DocumentSnapshot<Map<String, dynamic>>> documents =
+          querySnapshot.docs.cast<DocumentSnapshot<Map<String, dynamic>>>();
       if (documents.isNotEmpty && documents != []) {
         passValuesToPage(context, documents, position);
       } else {
@@ -72,19 +77,20 @@ class DashboardDetails {
     }
   }
 
-  // Method to pass the fetched documents to the dashboard page. 
-  void passValuesToPage(BuildContext context, List<DocumentSnapshot<Map<String, dynamic>>> documents, String position) {
+  // Method to pass the fetched documents to the dashboard page.
+  void passValuesToPage(BuildContext context,
+      List<DocumentSnapshot<Map<String, dynamic>>> documents, String position) {
     try {
       if (position == 'Principal') {
-        Navigator.push(
-          context, 
+        Navigator.pushReplacement(
+          context,
           MaterialPageRoute(
             builder: (context) => PrincipalPage(documents: documents),
           ),
         );
       } else {
-        Navigator.push(
-          context, 
+        Navigator.pushReplacement(
+          context,
           MaterialPageRoute(
             builder: (context) => DashboardPage(documents: documents),
           ),
@@ -97,11 +103,11 @@ class DashboardDetails {
 
   // Method to filter the documents related to Class Advisors.
   List<DocumentSnapshot<Map<String, dynamic>>> filterAdvisorDocuments(
-    List<DocumentSnapshot<Map<String, dynamic>>>? allDocuments,
-    String depart,
-    String section,
-    int year,
-  ) {
+      List<DocumentSnapshot<Map<String, dynamic>>>? allDocuments,
+      String depart,
+      String section,
+      int year,
+      String college) {
     if (allDocuments == null) {
       return [];
     }
@@ -109,27 +115,35 @@ class DashboardDetails {
       final userData = doc.data();
       return userData!['department'] == depart &&
           userData['section'] == section &&
-          userData['year'] == year;
+          userData['year'] == year &&
+          userData['college'] == college;
     }).toList();
   }
 
-  // Method to filter the documents related to HoD. 
+  // Method to filter the documents related to HoD.
   List<DocumentSnapshot<Map<String, dynamic>>> filterHodDocuments(
-    List<DocumentSnapshot<Map<String, dynamic>>>? allDocuments,
-    String depart,
-    int year,
-  ) {
+      List<DocumentSnapshot<Map<String, dynamic>>>? allDocuments,
+      String depart,
+      int year,
+      String college) {
     if (allDocuments == null) {
       return [];
+    } else if (year == 1) {
+      return allDocuments.where((doc) {
+        final userData = doc.data();
+        return userData!['college'] == college && userData['year'] == 1;
+      }).toList();
+    } else {
+      return allDocuments.where((doc) {
+        final userData = doc.data();
+        return userData!['department'] == depart &&
+            userData['year'] != 1 &&
+            userData['college'] == college;
+      }).toList();
     }
-    return allDocuments.where((doc) {
-      final userData = doc.data();
-      return userData!['department'] == depart &&
-          userData['year'] == year;
-    }).toList();
   }
 
-  // Method to filter the documents related to Wardens. 
+  // Method to filter the documents related to Wardens.
   List<DocumentSnapshot<Map<String, dynamic>>> filterWardenDocuments(
     List<DocumentSnapshot<Map<String, dynamic>>>? allDocuments,
     String hostel,
@@ -143,18 +157,19 @@ class DashboardDetails {
     }).toList();
   }
 
-  // Method to separate the documents who are not yet arrived. 
+  // Method to separate the documents who are not yet arrived.
   List<DocumentSnapshot<Map<String, dynamic>>> notYetArrivedDocuments(
-    List<DocumentSnapshot<Map<String, dynamic>>>? allDocuments
-  ) {
+      List<DocumentSnapshot<Map<String, dynamic>>>? allDocuments) {
     return allDocuments!.where((doc) {
       final userData = doc.data();
-      return userData!['depart_status'] == 0;
+      return userData!['arrival_status'] == 0;
     }).toList();
   }
 
-  // Method to count the documents with the specified value. 
-  int countDocumentsWithFieldValue(List<DocumentSnapshot<Map<String, dynamic>>>? documents, String fieldName) {
+  // Method to count the documents with the specified value.
+  int countDocumentsWithFieldValue(
+      List<DocumentSnapshot<Map<String, dynamic>>>? documents,
+      String fieldName) {
     int count = 0;
     if (documents != null) {
       for (var document in documents) {
@@ -167,7 +182,10 @@ class DashboardDetails {
     return count;
   }
 
-  int countBasedOnHostelName(List<DocumentSnapshot<Map<String, dynamic>>>? documents, String hostelName, String fieldName) {
+  int countBasedOnHostelName(
+      List<DocumentSnapshot<Map<String, dynamic>>>? documents,
+      String hostelName,
+      String fieldName) {
     int count = 0;
     if (documents != null) {
       for (var document in documents) {
@@ -180,7 +198,10 @@ class DashboardDetails {
     return count;
   }
 
-  int countBasedOnDepartment(List<DocumentSnapshot<Map<String, dynamic>>>? documents, String department, String fieldName) {
+  int countBasedOnDepartment(
+      List<DocumentSnapshot<Map<String, dynamic>>>? documents,
+      String department,
+      String fieldName) {
     int count = 0;
     if (documents != null) {
       for (var document in documents) {
@@ -192,5 +213,4 @@ class DashboardDetails {
     }
     return count;
   }
-
 }

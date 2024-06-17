@@ -19,8 +19,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _selectedIndex = index;
     });
-    controller.animateToPage(index,
-        duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+    controller.jumpToPage(index);
   }
 
   Future<Widget> _getOutpassPage() async {
@@ -33,7 +32,8 @@ class _HomePageState extends State<HomePage> {
     return WillPopScope(
       onWillPop: () async {
         if (_backButtonPressedOnce) {
-          return true;
+          SystemNavigator.pop();
+          return false;
         } else {
           CustomSnackBar.showExitSnackBar(context);
           _backButtonPressedOnce = true;

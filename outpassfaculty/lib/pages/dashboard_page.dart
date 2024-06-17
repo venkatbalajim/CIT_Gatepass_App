@@ -15,8 +15,10 @@ class _DashboardPageState extends State<DashboardPage> {
   UserDetails userDetails = UserDetails();
   DashboardDetails dashboardDetails = DashboardDetails();
   bool asAdmin = false;
-  String adminMessage = "You are now switching to Admin mode. Are you sure to proceed?";
-  String downloadMsg = "Are you sure to delete expired outpass data in DATABASE and donwload them as CSV.";
+  String adminMessage =
+      "You are now switching to Admin mode. Are you sure to proceed?";
+  String downloadMsg =
+      "Are you sure to delete expired outpass data in DATABASE and donwload them as CSV.";
 
   @override
   void initState() {
@@ -70,7 +72,8 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Future<bool?> showConfirmationDialog(BuildContext context, String message) async {
+  Future<bool?> showConfirmationDialog(
+      BuildContext context, String message) async {
     return await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -82,13 +85,13 @@ class _DashboardPageState extends State<DashboardPage> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(true); 
+                Navigator.of(context).pop(true);
               },
               child: const Text('Yes'),
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(false); 
+                Navigator.of(context).pop(false);
               },
               child: const Text('No'),
             ),
@@ -106,7 +109,8 @@ class _DashboardPageState extends State<DashboardPage> {
 
     return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>?>(
       future: userDetails.getUserDetails(currentUserEmail!),
-      builder: (context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>?> snapshot) {
+      builder: (context,
+          AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>?> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: Dialog(
@@ -136,12 +140,14 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
           );
         } else if (snapshot.hasError) {
-          showErrorDialog(context, "Sorry, an error occurred. Please try later.");
+          showErrorDialog(
+              context, "Sorry, an error occurred. Please try later.");
           return const SizedBox();
         } else {
           final userData = snapshot.data!.data();
           String? position = userData!['position'];
           String? department = userData['department'];
+          String? college = userData['college'];
           int? year = userData['year'];
           String? section = userData['section'];
           String? hostel = userData['hostel'];
@@ -163,22 +169,35 @@ class _DashboardPageState extends State<DashboardPage> {
             });
           }
 
-          final advisorDocuments = dashboardDetails.filterAdvisorDocuments(filteredDocuments, department ?? '', section ?? '', year ?? 0);
-          final hodDocuments = dashboardDetails.filterHodDocuments(filteredDocuments, department ?? '', year ?? 0);
-          final wardenDocuments = dashboardDetails.filterWardenDocuments(filteredDocuments, hostel ?? '');
+          final advisorDocuments = dashboardDetails.filterAdvisorDocuments(
+              filteredDocuments,
+              department ?? '',
+              section ?? '',
+              year ?? 0,
+              college ?? '');
+          final hodDocuments = dashboardDetails.filterHodDocuments(
+              filteredDocuments, department ?? '', year ?? 0, college ?? '');
+          final wardenDocuments = dashboardDetails.filterWardenDocuments(
+              filteredDocuments, hostel ?? '');
 
-          int advisorDepartCount = dashboardDetails.countDocumentsWithFieldValue(advisorDocuments, 'depart_status');
-          int advisorArrivalCount = dashboardDetails.countDocumentsWithFieldValue(advisorDocuments, 'arrival_status');
+          int advisorDepartCount = dashboardDetails
+              .countDocumentsWithFieldValue(advisorDocuments, 'depart_status');
+          int advisorArrivalCount = dashboardDetails
+              .countDocumentsWithFieldValue(advisorDocuments, 'arrival_status');
 
-          int hodDepartCount = dashboardDetails.countDocumentsWithFieldValue(hodDocuments, 'depart_status');
-          int hodArrivalCount = dashboardDetails.countDocumentsWithFieldValue(hodDocuments, 'arrival_status');
+          int hodDepartCount = dashboardDetails.countDocumentsWithFieldValue(
+              hodDocuments, 'depart_status');
+          int hodArrivalCount = dashboardDetails.countDocumentsWithFieldValue(
+              hodDocuments, 'arrival_status');
 
-          int wardenDepartCount = dashboardDetails.countDocumentsWithFieldValue(wardenDocuments, 'depart_status');
-          int wardenArrivalCount = dashboardDetails.countDocumentsWithFieldValue(wardenDocuments, 'arrival_status');
+          int wardenDepartCount = dashboardDetails.countDocumentsWithFieldValue(
+              wardenDocuments, 'depart_status');
+          int wardenArrivalCount = dashboardDetails
+              .countDocumentsWithFieldValue(wardenDocuments, 'arrival_status');
 
           return SafeArea(
             child: RefreshIndicator(
-              backgroundColor: Colors.blue[900],
+              backgroundColor: Theme.of(context).colorScheme.primary,
               color: Colors.white,
               onRefresh: () async {
                 await dashboardDetails.fetchAllInfo(context);
@@ -188,13 +207,18 @@ class _DashboardPageState extends State<DashboardPage> {
               // ignore: deprecated_member_use
               child: WillPopScope(
                 onWillPop: () async {
-                  Navigator.popUntil(context, (route) => route.settings.name == '/options');
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HomePage(),
+                    ),
+                  );
                   return false;
                 },
                 child: Scaffold(
                   appBar: AppBar(
                     toolbarHeight: 60,
-                    foregroundColor: Colors.blue[900],
+                    foregroundColor: Theme.of(context).colorScheme.primary,
                     automaticallyImplyLeading: false,
                     title: const Text(
                       "Outpass Dashboard",
@@ -206,7 +230,8 @@ class _DashboardPageState extends State<DashboardPage> {
                       if (isAdmin == 'yes' && !asAdmin)
                         IconButton(
                           onPressed: () async {
-                            bool? confirm = await showConfirmationDialog(context, adminMessage);
+                            bool? confirm = await showConfirmationDialog(
+                                context, adminMessage);
                             if (confirm != null && confirm) {
                               setState(() {
                                 filteredDocuments = widget.documents;
@@ -226,35 +251,44 @@ class _DashboardPageState extends State<DashboardPage> {
                           },
                           position: position ?? '',
                         ),
-                      if (asAdmin) 
+                      if (asAdmin)
                         IconButton(
-                          onPressed: () async {
-                            bool? confirm = await showConfirmationDialog(context, downloadMsg);
-                            if (confirm != null && confirm) {
-                              ExcelGenerator generator = ExcelGenerator();
-                              generator.requestPermission(context);
-                            }
-                          }, icon: const Icon(
-                            Icons.download_rounded,
-                            size: 30,
-                          )
-                        )
+                            onPressed: () async {
+                              bool? confirm = await showConfirmationDialog(
+                                  context, downloadMsg);
+                              if (confirm != null && confirm) {
+                                ExcelGenerator generator = ExcelGenerator();
+                                generator.requestPermission(context);
+                              }
+                            },
+                            icon: const Icon(
+                              Icons.download_rounded,
+                              size: 30,
+                            ))
                     ],
                   ),
                   body: ListView(
                     padding: const EdgeInsets.all(15),
                     children: [
                       position == 'Class Advisor'
-                        ? AdvisorDashboardCounter(countOne: advisorDepartCount, countTwo: advisorArrivalCount)
-                        : position == 'HoD'
-                            ? HodDashboardCounter(countOne: hodDepartCount, countTwo: hodArrivalCount)
-                            : WardenDashboardCounter(countOne: wardenDepartCount, countTwo: wardenArrivalCount),
-                      const SizedBox(height: 30,),
+                          ? AdvisorDashboardCounter(
+                              countOne: advisorDepartCount,
+                              countTwo: advisorArrivalCount)
+                          : position == 'HoD'
+                              ? HodDashboardCounter(
+                                  countOne: hodDepartCount,
+                                  countTwo: hodArrivalCount)
+                              : WardenDashboardCounter(
+                                  countOne: wardenDepartCount,
+                                  countTwo: wardenArrivalCount),
+                      const SizedBox(
+                        height: 30,
+                      ),
                       position == 'Class Advisor'
-                        ? DashboardTable(documents: advisorDocuments)
-                        : position == 'HoD'
-                            ? DashboardTable(documents: hodDocuments)
-                            : DashboardTable(documents: wardenDocuments),
+                          ? DashboardTable(documents: advisorDocuments)
+                          : position == 'HoD'
+                              ? DashboardTable(documents: hodDocuments)
+                              : DashboardTable(documents: wardenDocuments),
                     ],
                   ),
                 ),

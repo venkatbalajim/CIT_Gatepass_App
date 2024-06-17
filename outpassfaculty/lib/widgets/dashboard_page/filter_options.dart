@@ -64,8 +64,9 @@ class _FilterOptionsState extends State<FilterOptions> {
                     options.length,
                     (index) {
                       return RadioListTile<String>(
-                        activeColor: Colors.blue[900],
-                        title: Text(options[index], style: const TextStyle(fontSize: 15)),
+                        activeColor: Theme.of(context).colorScheme.primary,
+                        title: Text(options[index],
+                            style: const TextStyle(fontSize: 15)),
                         value: options[index],
                         groupValue: selectedValue,
                         onChanged: (value) {
@@ -92,7 +93,9 @@ class _FilterOptionsState extends State<FilterOptions> {
                           name: 'Apply',
                         ),
                       ),
-                      const SizedBox(width: 10,),
+                      const SizedBox(
+                        width: 10,
+                      ),
                     ],
                   )
                 ],

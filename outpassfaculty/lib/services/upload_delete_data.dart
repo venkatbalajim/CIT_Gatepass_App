@@ -5,7 +5,8 @@ import '../utils/imports.dart';
 Future<void> deleteAllDocuments(BuildContext context) async {
   UploadStudentData.showLoadingDialog(context);
   try {
-    CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
+    CollectionReference usersCollection =
+        FirebaseFirestore.instance.collection('users');
 
     QuerySnapshot querySnapshot = await usersCollection.get();
 
@@ -14,15 +15,17 @@ Future<void> deleteAllDocuments(BuildContext context) async {
     }
 
     Navigator.pop(context);
-    UploadStudentData.showFinishDialog(context, 'All the students data are successfully deleted. Check the database.');
+    UploadStudentData.showFinishDialog(context,
+        'All the students data are successfully deleted. Check the database.');
     print('All documents in the "users" collection have been deleted.');
   } catch (e) {
-    UploadStudentData.showErrorDialog(context, 'Sorry, unable to delete the data in the database.');
+    UploadStudentData.showErrorDialog(
+        context, 'Sorry, unable to delete the data in the database.');
     print('Error deleting documents: $e');
   }
 }
 
-class UploadStudentData{
+class UploadStudentData {
   final String filePath;
 
   UploadStudentData(this.filePath);
@@ -54,13 +57,16 @@ class UploadStudentData{
       if (csvFile != null) {
         showLoadingDialog(context);
         List<List<dynamic>> csvData = await readCSVFile(csvFile);
-        CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
+        CollectionReference usersCollection =
+            FirebaseFirestore.instance.collection('users');
 
         for (int i = 1; i < csvData.length; i++) {
           List<dynamic> rowData = csvData[i];
           Map<String, dynamic> userData = createCustomMap(rowData, context);
 
-          QuerySnapshot querySnapshot = await usersCollection.where('email', isEqualTo: userData['email']).get();
+          QuerySnapshot querySnapshot = await usersCollection
+              .where('email', isEqualTo: userData['email'])
+              .get();
 
           if (querySnapshot.docs.isNotEmpty) {
             await querySnapshot.docs.first.reference.update(userData);
@@ -69,30 +75,32 @@ class UploadStudentData{
           }
         }
         Navigator.pop(context);
-        showFinishDialog(context, 'Data uploaded successfully. Check the database.');
+        showFinishDialog(
+            context, 'Data uploaded successfully. Check the database.');
       }
     } catch (e) {
       print(e.toString());
     }
   }
 
-  Map<String, dynamic> createCustomMap(List<dynamic> rowData, BuildContext context) {
-    if (rowData.length < 10) {
-      showErrorDialog(context, 'ALERT: Some student data is missing in the CSV file.');
+  Map<String, dynamic> createCustomMap(
+      List<dynamic> rowData, BuildContext context) {
+    if (rowData.length < 9) {
+      showErrorDialog(
+          context, 'ALERT: Some student data is missing in the CSV file.');
       throw ArgumentError('Invalid number of elements in the rowData list.');
     }
 
     return {
       'name': rowData[0],
       'email': rowData[1],
-      'register_no': rowData[2],
+      'college': rowData[2],
       'department': rowData[3],
       'section': rowData[4],
       'year': rowData[5],
       'student_mobile': rowData[6],
       'parent_mobile': rowData[7],
       'hostel': rowData[8],
-      'room_no': rowData[9],
       'fcm_token': 'Unknown'
     };
   }
@@ -176,7 +184,10 @@ class UploadStudentData{
                     child: SmallButton(
                       name: 'Ok',
                       onTap: () {
-                        Navigator.popUntil(context, (route) => route.settings.name == '/options');
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage()));
                       },
                     ),
                   ),
@@ -213,10 +224,10 @@ class UploadStudentData{
                   ),
                   SizedBox(height: 30),
                   Text(
-                    "Uploading the data. This may take some time.",
+                    "This may take some time.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 15,
                     ),
                   ),
                   SizedBox(height: 20),
@@ -228,5 +239,4 @@ class UploadStudentData{
       },
     );
   }
-
 }

@@ -97,7 +97,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
 
           return SafeArea(
               child: RefreshIndicator(
-            backgroundColor: Colors.blue[900],
+            backgroundColor: Theme.of(context).colorScheme.primary,
             color: Colors.white,
             onRefresh: () async {
               await userDetails.fetchAllInfo(context);
@@ -107,8 +107,10 @@ class _SubmissionPageState extends State<SubmissionPage> {
             // ignore: deprecated_member_use
             child: WillPopScope(
                 onWillPop: () async {
-                  Navigator.popUntil(
-                      context, (route) => route.settings.name == '/options');
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomePage()));
                   return true;
                 },
                 child: Scaffold(
@@ -119,7 +121,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
                         "Students Outpass Submission",
                         style: TextStyle(
                           fontSize: 20,
-                          color: Colors.blue[900],
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                     ),

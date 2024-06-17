@@ -5,13 +5,15 @@ class FirebaseService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  static const Error_Message_1 = "Sorry, something went wrong. Please try again.";
-  static const Error_Message_2 = "Sorry, this is unauthorized Gmail account. Kindly use Gmail provided by the college.";
+  static const Error_Message_1 =
+      "Sorry, something went wrong. Please try again.";
+  static const Error_Message_2 =
+      "Sorry, this is unauthorized Gmail account. Kindly use Gmail provided by the college.";
 
   static void showLoadingDialog(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible: false, 
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Colors.white,
@@ -72,11 +74,11 @@ class FirebaseService {
                 SizedBox(
                   width: 100,
                   child: SmallButton(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  name: 'Ok',
-                ),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    name: 'Ok',
+                  ),
                 )
               ],
             ),
@@ -86,72 +88,80 @@ class FirebaseService {
     );
   }
 
-
-
   static Future<String?> signInwithGoogle(BuildContext context) async {
-  try {
-    showLoadingDialog(context);
+    try {
+      showLoadingDialog(context);
 
-    final GoogleSignInAccount? googleSignInAccount =
-        await _googleSignIn.signIn();
+      final GoogleSignInAccount? googleSignInAccount =
+          await _googleSignIn.signIn();
 
-    if (googleSignInAccount != null) {
-      final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken,
-      );
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken,
+        );
 
-      final UserCredential userCredential =
-          await _auth.signInWithCredential(credential);
+        final UserCredential userCredential =
+            await _auth.signInWithCredential(credential);
 
-      final String? userEmail = userCredential.user?.email;
-      if (userEmail != null) {
-        final QuerySnapshot<Map<String, dynamic>> userSnapshot = await FirebaseFirestore.instance
-            .collection('faculty')
-            .where('email', isEqualTo: userEmail)
-            .get();
+        final String? userEmail = userCredential.user?.email;
+        if (userEmail != null) {
+          final QuerySnapshot<Map<String, dynamic>> userSnapshot =
+              await FirebaseFirestore.instance
+                  .collection('faculty')
+                  .where('email', isEqualTo: userEmail)
+                  .get();
 
-        if (userSnapshot.docs.isNotEmpty) {
-          await FirebaseMessagingService().initNotifications();
-          Navigator.pop(context);
-          final userData = userSnapshot.docs.first.data();
-          final position = userData['position'];
-          if (position == "Principal") {
-            DashboardDetails dashboardDetails = DashboardDetails();
-            await dashboardDetails.fetchAllInfo(context);
+          if (userSnapshot.docs.isNotEmpty) {
+            await FirebaseMessagingService().initNotifications();
+            Navigator.pop(context);
+            final userData = userSnapshot.docs.first.data();
+            final position = userData['position'];
+            if (position == "Principal") {
+              DashboardDetails dashboardDetails = DashboardDetails();
+              await dashboardDetails.fetchAllInfo(context);
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomePage(),
+                ),
+              );
+            }
           } else {
-            Navigator.pushNamed(context, '/options');
+            await _googleSignIn.signOut();
+            await _auth.currentUser?.delete();
+            Navigator.pop(context);
+            showErrorDialog(context, Error_Message_2);
           }
         } else {
-          await _googleSignIn.signOut();
-          await _auth.currentUser?.delete();
           Navigator.pop(context);
-          showErrorDialog(context, Error_Message_2);
         }
       } else {
         Navigator.pop(context);
       }
-    } else {
+      // ignore: unused_catch_clause
+    } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
+      showErrorDialog(context, Error_Message_1);
     }
-  // ignore: unused_catch_clause
-  } on FirebaseAuthException catch (e) {
-    Navigator.pop(context);
-    showErrorDialog(context, Error_Message_1);
   }
-}
-
 
   static Future<void> signOutFromGoogle(BuildContext context) async {
     try {
       showLoadingDialog(context);
       await _googleSignIn.signOut();
       await _auth.signOut();
-      Navigator.popUntil(context, (route) => route.settings.name == '/');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const WelcomePage(),
+        ),
+      );
     } catch (error) {
-      Navigator.pop(context); 
+      Navigator.pop(context);
       showErrorDialog(context, Error_Message_1);
     }
   }

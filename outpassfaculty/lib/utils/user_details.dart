@@ -44,7 +44,7 @@ class UserDetails {
 
   void passValuesToPage(BuildContext context,
       List<QueryDocumentSnapshot<Map<dynamic, dynamic>>>? outpassList) {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => SubmissionPage(outpassList: outpassList),
@@ -63,16 +63,6 @@ class UserDetails {
     return userQuery.docs.isNotEmpty ? userQuery.docs.first : null;
   }
 
-  // Method to fetch the document_id of the student document.
-  Future<String> getStudentDocumentId(String registerNo) async {
-    final userCollection = FirebaseFirestore.instance.collection('users');
-
-    final userQuery =
-        await userCollection.where('register_no', isEqualTo: registerNo).get();
-
-    return userQuery.docs.isNotEmpty ? userQuery.docs.first.id : '';
-  }
-
   // Method to fetch all the required details of a faculty.
   Future<List<QueryDocumentSnapshot<Map<dynamic, dynamic>>>> fetchAllInfo(
       BuildContext context) async {
@@ -83,13 +73,15 @@ class UserDetails {
     if (userDocument != null) {
       final userData = userDocument.data();
       String? position = userData['position'];
+      String? college = userData['college'];
       int? year = userData['year'];
       String? department = userData['department'];
       String? section = userData['section'];
       String? hostel = userData['hostel'];
       print('Details of the faculty: $position, $year,  $department, $section');
       List<QueryDocumentSnapshot<Map<dynamic, dynamic>>>? outpassList =
-          await getStudentOutpass(position, year, department, section, hostel);
+          await getStudentOutpass(
+              position, college, year, department, section, hostel);
       if (outpassList != null && outpassList != [] && outpassList.isNotEmpty) {
         passValuesToPage(context, outpassList);
       } else {
@@ -106,6 +98,7 @@ class UserDetails {
   // Fetch all the outpass details of the students.
   Future<List<QueryDocumentSnapshot<Map<dynamic, dynamic>>>?> getStudentOutpass(
       String? position,
+      String? college,
       int? year,
       String? department,
       String? section,
@@ -116,6 +109,7 @@ class UserDetails {
 
     if (position == 'Class Advisor') {
       userQuery = await userCollection
+          .where('college', isEqualTo: college)
           .where(
             'year',
             isEqualTo: year,
@@ -136,12 +130,14 @@ class UserDetails {
             'warden_status',
             isNotEqualTo: -1,
           )
+          .orderBy('warden_status')
           .orderBy('submit_date')
           .get();
     } else if (position == 'HoD') {
       QuerySnapshot<Map<String, dynamic>> query;
       if (year != null && year == 1) {
         query = await userCollection
+            .where('college', isEqualTo: college)
             .where(
               'year',
               isEqualTo: year,
@@ -158,9 +154,12 @@ class UserDetails {
               'warden_status',
               isNotEqualTo: -1,
             )
+            .orderBy('warden_status')
+            .orderBy('submit_date')
             .get();
       } else {
         query = await userCollection
+            .where('college', isEqualTo: college)
             .where(
               'year',
               isNotEqualTo: 1,
@@ -177,13 +176,18 @@ class UserDetails {
               'hod_status',
               isEqualTo: 0,
             )
-            .where(
-              'warden_status',
-              isNotEqualTo: -1,
-            )
+            .orderBy('year')
+            .orderBy('submit_date')
             .get();
       }
       userQuery = query;
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> partialResult =
+          query.docs;
+      List<QueryDocumentSnapshot<Map<dynamic, dynamic>>> filteredDocs =
+          partialResult.where((doc) {
+        return doc['warden_status'] != -1;
+      }).toList();
+      return filteredDocs;
     } else if (hostel != null && position == 'Warden') {
       userQuery = await userCollection
           .where(
@@ -194,6 +198,7 @@ class UserDetails {
             'warden_status',
             isEqualTo: 0,
           )
+          .orderBy('submit_date')
           .get();
     } else {
       return null;

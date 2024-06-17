@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import '../utils/imports.dart';
 
 class LoadingPage extends StatefulWidget {
@@ -20,9 +22,16 @@ class _LoadingPageState extends State<LoadingPage> {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
     String? currentUserEmail = user?.email;
+    UserDetails userDetails = UserDetails();
     if (currentUserEmail != null) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
+      final userData = await userDetails.getUserDetails(currentUserEmail);
+      if (userData!['position'] == "Principal") {
+        DashboardDetails dashboardDetails = DashboardDetails();
+        await dashboardDetails.fetchAllInfo(context);
+      } else {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const HomePage()));
+      }
     } else {
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => const WelcomePage()));
