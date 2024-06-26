@@ -101,3 +101,5 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 export 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 export 'package:qr_flutter/qr_flutter.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+export 'package:flutter_windowmanager/flutter_windowmanager.dart';

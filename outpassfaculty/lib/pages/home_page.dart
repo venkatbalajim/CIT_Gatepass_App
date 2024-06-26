@@ -146,9 +146,9 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          HomeButton(context, button_1),
+                          GridButton(context, button_1),
                           const SizedBox(width: 10),
-                          HomeButton(context, button_2),
+                          GridButton(context, button_2),
                         ],
                       ),
                       const SizedBox(height: 10),
@@ -156,9 +156,9 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          HomeButton(context, button_3),
+                          GridButton(context, button_3),
                           const SizedBox(width: 10),
-                          HomeButton(context, button_4),
+                          GridButton(context, button_4),
                         ],
                       ),
                       if (userData['admin'] == 'yes')
@@ -168,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            HomeButton(context, HomePage.button_5),
+                            GridButton(context, HomePage.button_5),
                           ],
                         ),
                     ],

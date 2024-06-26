@@ -179,8 +179,8 @@ class _DatabasePageState extends State<DatabasePage> {
                   bool? confirm = await showConfirmationDialog(
                       context, "Are you sure to upload the data in database?");
                   if (confirm != null && confirm) {
-                    UploadStudentData uploadStudentData =
-                        UploadStudentData(filePath);
+                    AddAllStudentsData uploadStudentData =
+                        AddAllStudentsData(filePath);
                     uploadStudentData.uploadData(context);
                   }
                 },
@@ -212,7 +212,7 @@ class _DatabasePageState extends State<DatabasePage> {
                 bool? confirm = await showConfirmationDialog(context,
                     "Are you sure to DELETE all the students data in database?");
                 if (confirm != null && confirm) {
-                  await deleteAllDocuments(context);
+                  await deleteAllStudentsData(context);
                 }
               },
               child: const Text(

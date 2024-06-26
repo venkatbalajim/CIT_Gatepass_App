@@ -8,6 +8,11 @@ const button_3 = "Dashboard";
 const button_4 = "Logout";
 const button_5 = "Database";
 
+const button_6 = "Students";
+const button_7 = "Faculty";
+const button_8 = "Warden";
+const button_9 = "Security";
+
 Widget? getButtonIcon(String name) {
   switch (name) {
     case button_1:
@@ -40,6 +45,30 @@ Widget? getButtonIcon(String name) {
         color: Colors.white,
         size: 35,
       );
+    case button_6:
+      return const Icon(
+        Icons.school,
+        color: Colors.white,
+        size: 35,
+      );
+    case button_7:
+      return const Icon(
+        Icons.work,
+        color: Colors.white,
+        size: 35,
+      );
+    case button_8:
+      return const Icon(
+        Icons.person,
+        color: Colors.white,
+        size: 35,
+      );
+    case button_9:
+      return const Icon(
+        Icons.verified_user,
+        color: Colors.white,
+        size: 35,
+      );
     default:
       return null;
   }
@@ -50,7 +79,7 @@ Color? getButtonColor(BuildContext context, String name) {
 }
 
 // ignore: non_constant_identifier_names
-Widget HomeButton(BuildContext context, String name) {
+Widget GridButton(BuildContext context, String name) {
   Widget? buttonIcon = getButtonIcon(name);
   Color? buttonColor = getButtonColor(context, name);
   UserDetails userDetails = UserDetails();
@@ -67,7 +96,9 @@ Widget HomeButton(BuildContext context, String name) {
       } else if (name == button_4) {
         FirebaseService.signOutFromGoogle(context);
       } else if (name == button_5) {
-        Navigator.pushNamed(context, '/database');
+        Navigator.pushNamed(context, '/selectdb');
+      } else if (name == button_9) {
+        Navigator.pushNamed(context, '/security');
       }
     },
     child: Container(

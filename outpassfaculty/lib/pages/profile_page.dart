@@ -98,38 +98,41 @@ class _ProfilePageState extends State<ProfilePage> {
 
           Widget pageBody(String? email) {
             if (email != null) {
-              return ListView(padding: const EdgeInsets.all(20), children: [
-                const SizedBox(height: 10),
-                Text(
-                  "Faculty Profile",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 25,
-                    color: Theme.of(context).colorScheme.primary,
+              return ListView(
+                padding: const EdgeInsets.all(20),
+                children: [
+                  const SizedBox(height: 10),
+                  Text(
+                    "Faculty Profile",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 25,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 15),
-                Container(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
-                    alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.amber[100]),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Account Information',
-                            style: TextStyle(
-                                color: Colors.amber[900],
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15)),
-                        const SizedBox(height: 10),
-                        InfoCard(label: "Email ID", detail: userData?['email']),
-                      ],
-                    )),
-                const SizedBox(height: 10),
-                Container(
+                  const SizedBox(height: 15),
+                  Container(
+                      padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
+                      alignment: Alignment.centerLeft,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.amber[100]),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Account Information',
+                              style: TextStyle(
+                                  color: Colors.amber[900],
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15)),
+                          const SizedBox(height: 10),
+                          InfoCard(
+                              label: "Email ID", detail: userData?['email']),
+                        ],
+                      )),
+                  const SizedBox(height: 10),
+                  Container(
                     padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
                     alignment: Alignment.centerLeft,
                     decoration: BoxDecoration(
@@ -161,24 +164,34 @@ class _ProfilePageState extends State<ProfilePage> {
                         if (userData?['position'] == 'Warden')
                           InfoCard(
                               label: 'Hostel', detail: userData?['hostel']),
+                        if (userData?['position'] == 'Warden')
+                          InfoCard(
+                              label: 'Admin',
+                              detail:
+                                  userData?['admin'] == 'yes' ? "Yes" : "No"),
                         if (userData?['position'] == 'Class Advisor')
                           InfoCard(
                               label: "Section", detail: userData?['section']),
                       ],
-                    )),
-              ]);
+                    ),
+                  ),
+                ],
+              );
             } else {
               return Center(
-                  child: SizedBox(
-                width: 200,
-                height: 200,
-                child: Text(
-                  textAlign: TextAlign.center,
-                  'Sorry, unable to load the page.',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.grey[900]),
+                child: SizedBox(
+                  width: 200,
+                  height: 200,
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    'Sorry, unable to load the page.',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[900],
+                    ),
+                  ),
                 ),
-              ));
+              );
             }
           }
 

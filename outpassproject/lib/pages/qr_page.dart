@@ -24,6 +24,11 @@ class _QRPageState extends State<QRPage> {
     setState(() {
       qrData = widget.documentId;
     });
+    disableScreenshots();
+  }
+
+  Future<void> disableScreenshots() async {
+    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
 
   void showErrorDialog(BuildContext context, String message) {

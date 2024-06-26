@@ -9,6 +9,8 @@ class Routes {
   static const String principal = '/principal';
   static const String database = '/database';
   static const String welcome = '/welcome';
+  static const String selectDB = '/selectdb';
+  static const String security = '/security';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -19,7 +21,9 @@ class Routes {
       dashboard: (context) => const DashboardPage(),
       principal: (context) => const PrincipalPage(),
       database: (context) => const DatabasePage(),
-      welcome: (context) => const WelcomePage()
+      welcome: (context) => const WelcomePage(),
+      selectDB: (context) => const SelectDatabasePage(),
+      security: (context) => const SecurityDBPage()
     };
   }
 }

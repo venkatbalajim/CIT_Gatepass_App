@@ -12,8 +12,9 @@ class InstructionCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         color: Colors.amber[200],
       ),
-      child: Text(instruction, 
-        textAlign: TextAlign.left,
+      child: Text(
+        instruction,
+        textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w700,
