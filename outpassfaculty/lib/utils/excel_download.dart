@@ -13,8 +13,7 @@ class ExcelGenerator {
         if (status1 == PermissionStatus.granted) {
           generateCSV(context);
         } else {
-          CustomSnackBar.showExitSnackBar(
-              context, 'Storage permission denied.');
+          CustomSnackBar.showSnackBar(context, 'Storage permission denied.');
         }
       } else {
         PermissionStatus status2 =
@@ -22,8 +21,7 @@ class ExcelGenerator {
         if (status2 == PermissionStatus.granted) {
           generateCSV(context);
         } else {
-          CustomSnackBar.showExitSnackBar(
-              context, 'Storage permission denied.');
+          CustomSnackBar.showSnackBar(context, 'Storage permission denied.');
         }
       }
     } else if (Platform.isIOS) {
@@ -32,10 +30,10 @@ class ExcelGenerator {
           status == PermissionStatus.limited) {
         generateCSV(context);
       } else {
-        CustomSnackBar.showExitSnackBar(context, 'Storage permission denied.');
+        CustomSnackBar.showSnackBar(context, 'Storage permission denied.');
       }
     } else {
-      CustomSnackBar.showExitSnackBar(context, 'Sorry, OS not supported.');
+      CustomSnackBar.showSnackBar(context, 'Sorry, OS not supported.');
     }
   }
 

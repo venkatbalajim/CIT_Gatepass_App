@@ -3,10 +3,10 @@
 import '../utils/imports.dart';
 
 // Add all students data at once
-class AddAllStudentsData {
+class AddStudentsData {
   final String filePath;
 
-  AddAllStudentsData(this.filePath);
+  AddStudentsData(this.filePath);
 
   Future<List<List<dynamic>>> readCSVFile(File file) async {
     String csvString = file.readAsStringSync();
@@ -54,11 +54,40 @@ class AddAllStudentsData {
         }
         Navigator.pop(context);
         showFinishDialog(
-            context, 'Data uploaded successfully. Check the database.');
+            context, 'Data added successfully. Check the database.');
       }
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  Future<void> addData(
+      BuildContext context, Map<String, dynamic> newData) async {
+    showLoadingDialog(context);
+    CollectionReference usersCollection =
+        FirebaseFirestore.instance.collection('users');
+    QuerySnapshot querySnapshot =
+        await usersCollection.where('email', isEqualTo: newData['email']).get();
+    if (querySnapshot.docs.isNotEmpty) {
+      Navigator.pop(context);
+      CustomSnackBar.showSnackBar(context,
+          'The student data linked with this Email ID is already exist.');
+      return;
+    }
+    await usersCollection.add(newData);
+    showFinishDialog(context, 'Data added successfully. Check the database.');
+  }
+
+  Future<void> updateData(
+      BuildContext context, Map<String, dynamic> newData) async {
+    showLoadingDialog(context);
+    CollectionReference usersCollection =
+        FirebaseFirestore.instance.collection('users');
+    QuerySnapshot querySnapshot =
+        await usersCollection.where('email', isEqualTo: newData['email']).get();
+    await querySnapshot.docs.first.reference.update(newData);
+    Navigator.pop(context);
+    showFinishDialog(context, 'Data updated successfully. Check the database.');
   }
 
   Map<String, dynamic> createCustomMap(
@@ -105,6 +134,39 @@ Future<void> deleteAllStudentsData(BuildContext context) async {
     showErrorDialog(
         context, 'Sorry, unable to delete the data in the database.');
     print('Error deleting documents: $e');
+  }
+}
+
+// Students database
+class StudentsDatabase {
+  Future<bool> requestStoragePermission() async {
+    if (Platform.isAndroid) {
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      int? version = int.tryParse(androidInfo.version.release);
+      if (version != null && version <= 12) {
+        PermissionStatus status1 = await Permission.storage.request();
+        return status1 == PermissionStatus.granted;
+      } else {
+        PermissionStatus status2 =
+            await Permission.manageExternalStorage.request();
+        return status2 == PermissionStatus.granted;
+      }
+    } else if (Platform.isIOS) {
+      PermissionStatus status = await Permission.storage.request();
+      return (status == PermissionStatus.granted ||
+          status == PermissionStatus.limited);
+    } else {
+      return false;
+    }
+  }
+
+  Future<List<QueryDocumentSnapshot<Map<dynamic, dynamic>>>?>
+      getStudentsData() async {
+    final studentsCollection = FirebaseFirestore.instance.collection('users');
+    QuerySnapshot<Map<dynamic, dynamic>> studentsData =
+        await studentsCollection.get();
+    return studentsData.docs;
   }
 }
 
@@ -228,10 +290,7 @@ void showFinishDialog(BuildContext context, String message) {
                   child: SmallButton(
                     name: 'Ok',
                     onTap: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomePage()));
+                      Navigator.pop(context);
                     },
                   ),
                 ),

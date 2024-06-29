@@ -48,7 +48,7 @@ class _WelcomePageState extends State<WelcomePage> {
           SystemNavigator.pop();
           return false;
         } else {
-          CustomSnackBar.showExitSnackBar(context, "Press again to exit app");
+          CustomSnackBar.showSnackBar(context, "Press again to exit app");
           _backButtonPressedOnce = true;
 
           if (_lastBackPressed == null ||

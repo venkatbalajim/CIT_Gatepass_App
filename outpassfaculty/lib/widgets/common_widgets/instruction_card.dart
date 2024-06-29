@@ -14,7 +14,7 @@ class InstructionCard extends StatelessWidget {
       ),
       child: Text(
         instruction,
-        textAlign: TextAlign.center,
+        textAlign: TextAlign.left,
         style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w700,

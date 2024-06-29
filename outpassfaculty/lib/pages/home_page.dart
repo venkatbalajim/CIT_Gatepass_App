@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
           SystemNavigator.pop();
           return false;
         } else {
-          CustomSnackBar.showExitSnackBar(context, "Press again to exit app");
+          CustomSnackBar.showSnackBar(context, "Press again to exit app");
           _backButtonPressedOnce = true;
 
           if (_lastBackPressed == null ||
@@ -91,37 +91,45 @@ class _HomePageState extends State<HomePage> {
         future: userDetail.getUserDetails(currentUserEmail!),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: Dialog(
-                backgroundColor: Colors.white,
-                surfaceTintColor: Colors.transparent,
-                child: SizedBox(
-                  width: 250,
-                  height: 200,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(height: 50),
-                      CircularProgressIndicator(
-                        color: Color.fromRGBO(13, 71, 161, 1),
+            return const SafeArea(
+              child: Scaffold(
+                body: Center(
+                  child: Dialog(
+                    backgroundColor: Colors.white,
+                    surfaceTintColor: Colors.transparent,
+                    child: SizedBox(
+                      width: 250,
+                      height: 200,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(height: 50),
+                          CircularProgressIndicator(
+                            color: Color.fromRGBO(13, 71, 161, 1),
+                          ),
+                          SizedBox(height: 30),
+                          Text(
+                            "Please wait a moment",
+                            style: TextStyle(
+                              fontSize: 17,
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                        ],
                       ),
-                      SizedBox(height: 30),
-                      Text(
-                        "Please wait a moment",
-                        style: TextStyle(
-                          fontSize: 17,
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                    ],
+                    ),
                   ),
                 ),
               ),
             );
           } else if (snapshot.hasError) {
             showErrorDialog(
-                context, "Sorry, an error occured. Please try later.");
-            return const SizedBox();
+                context, "Sorry, an error occurred. Please try later.");
+            return const SafeArea(
+              child: Scaffold(
+                backgroundColor: Colors.white,
+              ),
+            );
           } else {
             final userData = snapshot.data?.data();
             return SafeArea(

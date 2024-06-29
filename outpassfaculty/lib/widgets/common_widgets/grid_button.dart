@@ -97,8 +97,12 @@ Widget GridButton(BuildContext context, String name) {
         FirebaseService.signOutFromGoogle(context);
       } else if (name == button_5) {
         Navigator.pushNamed(context, '/selectdb');
+      } else if (name == button_6) {
+        Navigator.pushNamed(context, '/students');
       } else if (name == button_9) {
         Navigator.pushNamed(context, '/security');
+      } else {
+        return;
       }
     },
     child: Container(
