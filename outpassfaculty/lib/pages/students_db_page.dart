@@ -17,11 +17,11 @@ d. The required students data are in order:
     6. Year of study - Format: 1, 2, 3, 4 
     7. Student Mobile Number 
     8. Parent Mobile Number 
-    9. Hostel Name - First letter in capital 
+    9. Hostel Name 
 e. The file MUST have data in this order. 
 ''';
 
-String deleteAllDataMessage = '''
+String deleteAllStudentsDataMessage = '''
 BEFORE PROCEEDING THE ACTION:
 
 1. This action deletes all the students data currently present in the database.
@@ -378,7 +378,7 @@ class _StudentsDBPageState extends State<StudentsDBPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        InstructionCard(instruction: deleteAllDataMessage),
+        InstructionCard(instruction: deleteAllStudentsDataMessage),
         const SizedBox(height: 20),
         TextButton(
             style: ButtonStyle(

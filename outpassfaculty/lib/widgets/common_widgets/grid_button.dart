@@ -99,6 +99,10 @@ Widget GridButton(BuildContext context, String name) {
         Navigator.pushNamed(context, '/selectdb');
       } else if (name == button_6) {
         Navigator.pushNamed(context, '/students');
+      } else if (name == button_7) {
+        Navigator.pushNamed(context, '/faculty');
+      } else if (name == button_8) {
+        Navigator.pushNamed(context, '/warden');
       } else if (name == button_9) {
         Navigator.pushNamed(context, '/security');
       } else {

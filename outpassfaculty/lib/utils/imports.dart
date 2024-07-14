@@ -46,6 +46,14 @@ export 'package:outpassfaculty/pages/security_db_page.dart';
 import 'package:outpassfaculty/pages/students_db_page.dart';
 export 'package:outpassfaculty/pages/students_db_page.dart';
 
+// Faculty Database Page
+import 'package:outpassfaculty/pages/faculty_db_page.dart';
+export 'package:outpassfaculty/pages/faculty_db_page.dart';
+
+// Warden Database Page
+import 'package:outpassfaculty/pages/warden_db_page.dart';
+export 'package:outpassfaculty/pages/warden_db_page.dart';
+
 // -------------------------------------------------------------------
 
 // 02. SERVICES
@@ -155,8 +163,8 @@ import 'package:outpassfaculty/widgets/security_db_page/password_field.dart';
 export 'package:outpassfaculty/widgets/security_db_page/password_field.dart';
 
 // Test Input Field
-import 'package:outpassfaculty/widgets/students_db_page/input_field.dart';
-export 'package:outpassfaculty/widgets/students_db_page/input_field.dart';
+import 'package:outpassfaculty/widgets/common_widgets/input_field.dart';
+export 'package:outpassfaculty/widgets/common_widgets/input_field.dart';
 
 // -------------------------------------------------------------------
 

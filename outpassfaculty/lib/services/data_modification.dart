@@ -170,6 +170,200 @@ class StudentsDatabase {
   }
 }
 
+// Faculty database
+class FacultyDatabase {
+  Future<List<QueryDocumentSnapshot<Map<dynamic, dynamic>>>?>
+      getFacultyData() async {
+    final facultyCollection = FirebaseFirestore.instance.collection('faculty');
+    QuerySnapshot<Map<dynamic, dynamic>> facultyData =
+        await facultyCollection.where('position', isNotEqualTo: 'Warden').get();
+    return facultyData.docs;
+  }
+
+  Map<String, dynamic> facultyMap(List<dynamic> data) {
+    if (data[0] == "Class Advisor") {
+      return {
+        'position': data[0],
+        'name': data[1],
+        'email': data[2],
+        'college': data[3],
+        'department': data[4],
+        'year': data[5],
+        'section': data[6],
+        'fcm_token': "Unknown",
+      };
+    } else {
+      return {
+        'position': data[0],
+        'name': data[1],
+        'email': data[2],
+        'college': data[3],
+        'department': data[4],
+        'year': data[5],
+        'fcm_token': "Unknown",
+      };
+    }
+  }
+
+  Future<void> addFacultyData(
+      BuildContext context, Map<String, dynamic> newData) async {
+    showLoadingDialog(context);
+    try {
+      final facultyCollection =
+          FirebaseFirestore.instance.collection('faculty');
+      await facultyCollection.add(newData);
+      Navigator.pop(context);
+      showFinishDialog(context, 'Faculty data is added successfully');
+    } catch (e) {
+      Navigator.pop(context);
+      showErrorDialog(
+          context, 'Sorry, unable to add the data in the database.');
+      print('Error deleting documents: $e');
+    }
+  }
+
+  Future<void> updateFacultyData(
+      BuildContext context, Map<String, dynamic> newData) async {
+    showLoadingDialog(context);
+    try {
+      final facultyCollection =
+          FirebaseFirestore.instance.collection('faculty');
+      final document = await facultyCollection
+          .where('email', isEqualTo: newData['email'])
+          .get();
+      if (document.docs.isNotEmpty) {
+        await facultyCollection.doc(document.docs.first.id).update(newData);
+        if (newData['position'] == "HoD") {
+          await facultyCollection
+              .doc(document.docs.first.id)
+              .update({'section': FieldValue.delete()});
+        }
+        Navigator.pop(context);
+        showFinishDialog(context, 'Faculty data is updated successfully');
+      } else {
+        Navigator.pop(context);
+        showErrorDialog(
+            context, 'There is no faculty data with this Email ID.');
+      }
+    } catch (e) {
+      Navigator.pop(context);
+      showErrorDialog(
+          context, 'Sorry, unable to update the data in the database.');
+      print('Error deleting documents: $e');
+    }
+  }
+
+  Future<void> deleteFacultyData(BuildContext context, String email) async {
+    showLoadingDialog(context);
+    try {
+      CollectionReference facultyCollection =
+          FirebaseFirestore.instance.collection('faculty');
+      final document =
+          await facultyCollection.where('email', isEqualTo: email).get();
+      Navigator.pop(context);
+      if (document.docs.isNotEmpty) {
+        await facultyCollection.doc(document.docs.first.id).delete();
+        showFinishDialog(context, 'Faculty data is deleted successfully');
+      } else {
+        showErrorDialog(
+            context, 'There is no faculty data with this Email ID.');
+      }
+    } catch (e) {
+      Navigator.pop(context);
+      showErrorDialog(
+          context, 'Sorry, unable to delete the data in the database.');
+      print('Error deleting documents: $e');
+    }
+  }
+}
+
+// Warden database
+class WardenDatabase {
+  Map<String, dynamic> wardenMap(List<dynamic> data) {
+    return {
+      'position': "Warden",
+      'name': data[0],
+      'email': data[1],
+      'hostel': data[2],
+      'admin': data[3],
+      'fcm_token': "Unknown",
+    };
+  }
+
+  Future<List<QueryDocumentSnapshot<Map<dynamic, dynamic>>>?>
+      getWardenData() async {
+    final facultyCollection = FirebaseFirestore.instance.collection('faculty');
+    QuerySnapshot<Map<dynamic, dynamic>> facultyData =
+        await facultyCollection.where('position', isEqualTo: 'Warden').get();
+    return facultyData.docs;
+  }
+
+  Future<void> addWardenData(
+    BuildContext context,
+    Map<String, dynamic> newData,
+  ) async {
+    showLoadingDialog(context);
+    try {
+      final wardenCollection = FirebaseFirestore.instance.collection('faculty');
+      await wardenCollection.add(newData);
+      Navigator.pop(context);
+      showFinishDialog(context, 'Warden data is added successfully');
+    } catch (e) {
+      Navigator.pop(context);
+      showErrorDialog(
+          context, 'Sorry, unable to add the data in the database.');
+      print('Error deleting documents: $e');
+    }
+  }
+
+  Future<void> updateWardenData(
+      BuildContext context, Map<String, dynamic> newData) async {
+    showLoadingDialog(context);
+    try {
+      final facultyCollection =
+          FirebaseFirestore.instance.collection('faculty');
+      final document = await facultyCollection
+          .where('email', isEqualTo: newData['email'])
+          .get();
+      if (document.docs.isNotEmpty) {
+        await facultyCollection.doc(document.docs.first.id).update(newData);
+        Navigator.pop(context);
+        showFinishDialog(context, 'Warden data is updated successfully');
+      } else {
+        Navigator.pop(context);
+        showErrorDialog(context, 'There is no warden data with this Email ID.');
+      }
+    } catch (e) {
+      Navigator.pop(context);
+      showErrorDialog(
+          context, 'Sorry, unable to update the data in the database.');
+      print('Error deleting documents: $e');
+    }
+  }
+
+  Future<void> deleteWardenData(BuildContext context, String email) async {
+    showLoadingDialog(context);
+    try {
+      CollectionReference facultyCollection =
+          FirebaseFirestore.instance.collection('faculty');
+      final document =
+          await facultyCollection.where('email', isEqualTo: email).get();
+      Navigator.pop(context);
+      if (document.docs.isNotEmpty) {
+        await facultyCollection.doc(document.docs.first.id).delete();
+        showFinishDialog(context, 'Warden data is deleted successfully');
+      } else {
+        showErrorDialog(context, 'There is no warden data with this Email ID.');
+      }
+    } catch (e) {
+      Navigator.pop(context);
+      showErrorDialog(
+          context, 'Sorry, unable to delete the data in the database.');
+      print('Error deleting documents: $e');
+    }
+  }
+}
+
 // Security database
 class SecurityDatabase {
   Future<String> getSecurityPassword() async {

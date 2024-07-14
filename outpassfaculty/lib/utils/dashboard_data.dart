@@ -69,6 +69,8 @@ class DashboardDetails {
           querySnapshot.docs.cast<DocumentSnapshot<Map<String, dynamic>>>();
       if (documents.isNotEmpty && documents != []) {
         passValuesToPage(context, documents, position);
+      } else if (position == "Principal") {
+        passValuesToPage(context, documents, position);
       } else {
         showErrorDialog(context);
       }
