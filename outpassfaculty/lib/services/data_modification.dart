@@ -98,16 +98,23 @@ class AddStudentsData {
       throw ArgumentError('Invalid number of elements in the rowData list.');
     }
 
+    String name = rowData[0];
+    String email = rowData[1];
+    String college = rowData[2];
+    String department = rowData[3];
+    String section = rowData[4];
+    String hostel = rowData[8];
+
     return {
-      'name': rowData[0],
-      'email': rowData[1],
-      'college': rowData[2],
-      'department': rowData[3],
-      'section': rowData[4],
+      'name': name.trim().toUpperCase(),
+      'email': email.trim(),
+      'college': college.trim().toUpperCase(),
+      'department': department.trim().toUpperCase(),
+      'section': section.trim().toUpperCase(),
       'year': rowData[5],
       'student_mobile': rowData[6],
       'parent_mobile': rowData[7],
-      'hostel': rowData[8],
+      'hostel': hostel.trim().toUpperCase(),
       'fcm_token': 'Unknown'
     };
   }
@@ -181,24 +188,31 @@ class FacultyDatabase {
   }
 
   Map<String, dynamic> facultyMap(List<dynamic> data) {
+    String name = data[1];
+    String email = data[2];
+    String college = data[3];
+    String department = data[4];
+
     if (data[0] == "Class Advisor") {
+      String section = data[6];
+
       return {
         'position': data[0],
-        'name': data[1],
-        'email': data[2],
-        'college': data[3],
-        'department': data[4],
+        'name': name.trim().toUpperCase(),
+        'email': email.trim(),
+        'college': college.trim().toUpperCase(),
+        'department': department.trim().toUpperCase(),
         'year': data[5],
-        'section': data[6],
+        'section': section.trim().toUpperCase(),
         'fcm_token': "Unknown",
       };
     } else {
       return {
         'position': data[0],
-        'name': data[1],
-        'email': data[2],
-        'college': data[3],
-        'department': data[4],
+        'name': name.trim().toUpperCase(),
+        'email': email.trim(),
+        'college': college.trim().toUpperCase(),
+        'department': department.trim().toUpperCase(),
         'year': data[5],
         'fcm_token': "Unknown",
       };
@@ -280,11 +294,15 @@ class FacultyDatabase {
 // Warden database
 class WardenDatabase {
   Map<String, dynamic> wardenMap(List<dynamic> data) {
+    String name = data[0];
+    String email = data[1];
+    String hostel = data[2];
+
     return {
       'position': "Warden",
-      'name': data[0],
-      'email': data[1],
-      'hostel': data[2],
+      'name': name.trim().toUpperCase(),
+      'email': email.trim(),
+      'hostel': hostel.trim().toUpperCase(),
       'admin': data[3],
       'fcm_token': "Unknown",
     };
