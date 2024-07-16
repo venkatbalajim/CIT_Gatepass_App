@@ -75,6 +75,7 @@ class AddStudentsData {
       return;
     }
     await usersCollection.add(newData);
+    Navigator.pop(context);
     showFinishDialog(context, 'Data added successfully. Check the database.');
   }
 
@@ -138,6 +139,7 @@ Future<void> deleteAllStudentsData(BuildContext context) async {
         'All the students data are successfully deleted. Check the database.');
     print('All documents in the "users" collection have been deleted.');
   } catch (e) {
+    Navigator.pop(context);
     showErrorDialog(
         context, 'Sorry, unable to delete the data in the database.');
     print('Error deleting documents: $e');
